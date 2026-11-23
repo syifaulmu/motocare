@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Splash Screen Vector for MotoCare v2.0
+  Large circle with bold "M" letter
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+
+    <!-- Dark background fill -->
+    <path
+        android:fillColor="#0D0D0D"
+        android:pathData="M0,0 h360 v640 h-360 Z"/>
+
+    <!-- Large outer glow ring (subtle, gold) -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFD700"
+        android:strokeWidth="1"
+        android:strokeAlpha="0.3"
+        android:pathData="M180,300 m-130,0 a130,130 0 1,0 260,0 a130,130 0 1,0 -260,0"/>
+
+    <!-- Main circle (orange border, dark fill) -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:strokeColor="#FF6B00"
+        android:strokeWidth="6"
+        android:pathData="M180,300 m-110,0 a110,110 0 1,0 220,0 a110,110 0 1,0 -220,0"/>
+
+    <!-- Inner decorative ring -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FF6B00"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.5"
+        android:pathData="M180,300 m-95,0 a95,95 0 1,0 190,0 a95,95 0 1,0 -190,0"/>
+
+    <!-- Bold "M" letter centered in circle -->
+    <!-- M letterform: two vertical strokes with a V in the middle -->
+    <path
+        android:fillColor="#FF6B00"
+        android:pathData="
+            M128,370
+            L128,240
+            L148,240
+            L180,308
+            L212,240
+            L232,240
+            L232,370
+            L212,370
+            L212,278
+            L185,335
+            L175,335
+            L148,278
+            L148,370
+            Z"/>
+
+    <!-- Tagline dots below M -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M162,398 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"/>
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M180,398 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"/>
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M198,398 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0"/>
+
+    <!-- Bottom text area: "MotoCare" label (simple rectangles as placeholder bars) -->
+    <path
+        android:fillColor="#F5F0E8"
+        android:fillAlpha="0.7"
+        android:pathData="M145,440 h70 v8 h-70 Z"
+        android:strokeWidth="0"/>
+
+    <!-- Version tag -->
+    <path
+        android:fillColor="#FF6B00"
+        android:fillAlpha="0.8"
+        android:pathData="M160,460 h40 v6 h-40 Z"
+        android:strokeWidth="0"/>
+
+</vector>

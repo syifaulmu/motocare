@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0D0D0D" />
+  <meta name="description" content="MotoCare v2.0 — Aplikasi perawatan motor roda dua Indonesia" />
+  <title>MotoCare v2.0</title>
+
+  <!-- Google Fonts: Bebas Neue + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="theme-dark">
+
+<!-- ══════════════════════════════════════════════════
+     HEADER BAR
+════════════════════════════════════════════════════ -->
+<header class="header-bar">
+  <div class="header-logo-block">
+    <span class="header-logo">MotoCare</span>
+    <span class="header-tagline">Perawatan Motor Roda Dua Indonesia</span>
+  </div>
+
+  <div class="header-actions">
+    <!-- Notification Bell -->
+    <button class="notif-btn" id="btn-notif" aria-label="Notifikasi" title="Notifikasi">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="notification-dot" id="notif-dot" style="display:none;"></span>
+    </button>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle-btn" id="btn-theme-toggle" aria-label="Ganti tema" title="Ganti Tema">
+      <!-- Sun icon (shown in dark mode to switch to light) -->
+      <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <!-- Moon icon (shown in light mode to switch to dark) -->
+      <svg id="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════════════ -->
+<main class="main-content" id="main-content">
+
+  <!-- ════════════════════════════════
+       TAB 1 — BERANDA
+  ════════════════════════════════ -->
+  <section class="page-section active" id="section-beranda" data-tab="beranda">
+
+    <!-- Empty State (shown when no motor added) -->
+    <div class="empty-state" id="beranda-empty">
+      <div class="empty-state-icon">🛵</div>
+      <div class="empty-state-title">Belum Ada Motor</div>
+      <p class="empty-state-desc">Belum ada motor. Tambahkan motor pertamamu untuk mulai memantau kondisi kendaraan!</p>
+      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Motor
+      </button>
+    </div>
+
+    <!-- Dashboard (shown when motor exists) -->
+    <div id="beranda-dashboard" style="display:none;">
+
+      <!-- Active Motor Selector -->
+      <div class="motor-select-row mb-8">
+        <div>
+          <div class="speedometer-label">Motor Aktif</div>
+          <div class="active-motor-name" id="active-motor-name">— Pilih Motor —</div>
+        </div>
+        <select class="form-select" id="select-active-motor" style="width:auto; padding:7px 32px 7px 10px; font-size:12px;">
+          <!-- Options injected by JS -->
+        </select>
+      </div>
+
+      <!-- ODO Speedometer Card -->
+      <div class="dashboard-odo-card">
+        <div class="speedometer-label">Odometer Sekarang</div>
+        <div class="odo-display">
+          <span class="speedometer-number" id="odo-display">0</span>
+          <span class="speedometer-unit">KM</span>
+        </div>
+        <div class="d-flex align-center justify-between mt-8">
+          <div>
+            <div class="text-xs text-secondary">Odo Awal</div>
+            <div class="text-sm font-heading text-accent" id="odo-baseline">0 KM</div>
+          </div>
+          <button class="retro-btn retro-btn-outline retro-btn-sm" id="btn-update-odo">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Update Odo
+          </button>
+          <div>
+            <div class="text-xs text-secondary">Total Jarak</div>
+            <div class="text-sm font-heading text-accent" id="odo-total">0 KM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Status — 4 Komponen Kritis -->
+      <div class="section-heading">
+        <span class="section-heading-title">Status Kritis</span>
+        <button class="retro-btn retro-btn-sm" id="btn-lihat-semua-komponen">Lihat Semua</button>
+      </div>
+
+      <div class="quick-status-grid" id="quick-status-grid">
+        <!-- Items injected by JS: Oli, V-Belt/Rantai, Rem, Pajak -->
+        <div class="quick-status-item">
+          <div class="quick-status-icon">🛢️</div>
+          <span class="status-pill hampir" id="qs-oli">HAMPIR</span>
+          <span class="quick-status-name">Oli</span>
+        </div>
+        <div class="quick-status-item">
+          <div class="quick-status-icon">⚙️</div>
+          <span class="status-pill aman" id="qs-vbelt">AMAN</span>
+          <span class="quick-status-name">V-Belt</span>
+        </div>
+        <div class="quick-status-item">
+          <div class="quick-status-icon">🛑</div>
+          <span class="status-pill segera" id="qs-rem">SEGERA</span>
+          <span class="quick-status-name">Rem</span>
+        </div>
+        <div class="quick-status-item">
+          <div class="quick-status-icon">📋</div>
+          <span class="status-pill aman" id="qs-pajak">AMAN</span>
+          <span class="quick-status-name">Pajak</span>
+        </div>
+      </div>
+
+      <!-- Notifications Quick View -->
+      <div class="section-heading mt-8">
+        <span class="section-heading-title">Perlu Perhatian</span>
+      </div>
+      <div id="notif-list-beranda">
+        <!-- Injected by JS -->
+        <p class="text-secondary text-sm text-center" style="padding:16px 0;">Semua komponen dalam kondisi baik ✅</p>
+      </div>
+
+      <!-- Quick Action Tools (Kamera Live & Gemini AI) -->
+      <div class="section-heading mt-16">
+        <span class="section-heading-title">Fitur Khusus Motor</span>
+      </div>
+      <div class="d-flex gap-8 mb-16">
+        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-camera" style="border-color:var(--accent-secondary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
+          <span style="font-size:22px;">📹</span>
+          <span style="font-weight:700; font-size:12px;">Cek Fisik Kamera</span>
+          <span class="text-xs text-secondary">Pemeriksaan Visual Live</span>
+        </button>
+        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-gemini" style="border-color:var(--accent-primary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
+          <span style="font-size:22px;">✨</span>
+          <span style="font-weight:700; font-size:12px;">Tanya Gemini AI</span>
+          <span class="text-xs text-secondary">Diagnosa Gejala Mesin</span>
+        </button>
+      </div>
+
+    </div><!-- /beranda-dashboard -->
+  </section>
+
+  <!-- ════════════════════════════════
+       TAB 2 — MOTORKU
+  ════════════════════════════════ -->
+  <section class="page-section" id="section-motorku" data-tab="motorku">
+
+    <!-- Empty State -->
+    <div class="empty-state" id="motorku-empty">
+      <div class="empty-state-icon">🏍️</div>
+      <div class="empty-state-title">Belum Ada Motor</div>
+      <p class="empty-state-desc">Tambahkan motor kamu untuk mulai mencatat perawatan dan kondisi kendaraan.</p>
+      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Motor
+      </button>
+    </div>
+
+    <!-- Motor List -->
+    <div id="motorku-list" style="display:none;">
+      <!-- Motor cards injected by JS -->
+    </div>
+
+    <!-- Example Motor Card (template, hidden) -->
+    <template id="tpl-motor-card">
+      <div class="motor-card" data-motor-id="">
+        <div class="motor-card-header">
+          <div class="motor-card-info">
+            <div class="motor-card-name"></div>
+            <div class="motor-card-plate"></div>
+          </div>
+          <div class="d-flex" style="flex-direction:column; align-items:flex-end; gap:6px;">
+            <span class="motor-badge"></span>
+            <span class="tag-pill type-pill"></span>
+          </div>
+        </div>
+        <div class="motor-card-body">
+          <div class="gauge-label mb-8">
+            <span class="text-xs text-secondary">Odometer</span>
+            <span class="speedometer-label font-heading text-accent odo-val" style="font-size:16px;"></span>
+          </div>
+          <div class="d-flex gap-8">
+            <span class="tag-pill engine-tag"></span>
+            <span class="tag-pill year-tag"></span>
+          </div>
+        </div>
+        <div class="motor-card-actions">
+          <button class="retro-btn retro-btn-outline retro-btn-sm flex-1 btn-set-active">🏠 Jadikan Aktif</button>
+          <button class="retro-btn retro-btn-sm btn-edit-motor">✏️ Edit</button>
+          <button class="retro-btn retro-btn-danger retro-btn-sm btn-delete-motor">🗑️</button>
+        </div>
+      </div>
+    </template>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       TAB 3 — BBM
+  ════════════════════════════════ -->
+  <section class="page-section" id="section-bbm" data-tab="bbm">
+
+    <!-- No motor state -->
+    <div class="empty-state" id="bbm-empty">
+      <div class="empty-state-icon">⛽</div>
+      <div class="empty-state-title">Pilih Motor Dulu</div>
+      <p class="empty-state-desc">Tambahkan motor di tab Motorku untuk mulai mencatat pengisian BBM.</p>
+    </div>
+
+    <div id="bbm-content" style="display:none;">
+
+      <!-- Summary Stats -->
+      <div class="bbm-summary-grid" id="bbm-summary-grid">
+        <div class="bbm-stat-card">
+          <div class="bbm-stat-value" id="bbm-avg-kml">—</div>
+          <div class="bbm-stat-label">Avg km/L</div>
+        </div>
+        <div class="bbm-stat-card">
+          <div class="bbm-stat-value" id="bbm-total-liter">—</div>
+          <div class="bbm-stat-label">Liter Bulan Ini</div>
+        </div>
+        <div class="bbm-stat-card">
+          <div class="bbm-stat-value" id="bbm-est-biaya">—</div>
+          <div class="bbm-stat-label">Est. Rp/km</div>
+        </div>
+      </div>
+
+      <!-- Add BBM Button -->
+      <button class="retro-btn retro-btn-primary retro-btn-full mb-12" id="btn-catat-bbm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Catat Isi BBM
+      </button>
+
+      <!-- BBM Log List -->
+      <div class="section-heading">
+        <span class="section-heading-title">Log Pengisian</span>
+        <span class="text-xs text-secondary" id="bbm-log-count">0 catatan</span>
+      </div>
+
+      <div class="log-list" id="bbm-log-list">
+        <!-- Log items injected by JS -->
+        <div class="empty-state" style="padding:32px 0;">
+          <div class="empty-state-icon" style="width:52px;height:52px;font-size:24px;">📋</div>
+          <p class="empty-state-desc">Belum ada catatan BBM. Tekan "Catat Isi BBM" untuk mulai!</p>
+        </div>
+      </div>
+
+    </div><!-- /bbm-content -->
+  </section>
+
+  <!-- ════════════════════════════════
+       TAB 4 — SERVIS
+  ════════════════════════════════ -->
+  <section class="page-section" id="section-servis" data-tab="servis">
+
+    <!-- No motor state -->
+    <div class="empty-state" id="servis-empty">
+      <div class="empty-state-icon">🔧</div>
+      <div class="empty-state-title">Pilih Motor Dulu</div>
+      <p class="empty-state-desc">Tambahkan motor di tab Motorku untuk memantau komponen dan jadwal servis.</p>
+    </div>
+
+    <div id="servis-content" style="display:none;">
+
+      <!-- Secondary Tabs -->
+      <div class="tab-secondary" id="servis-tabs">
+        <button class="tab-secondary-item active" data-servis-tab="komponen">🔧 Komponen</button>
+        <button class="tab-secondary-item" data-servis-tab="log">📋 Log Servis</button>
+        <button class="tab-secondary-item" data-servis-tab="checklist">✅ Checklist</button>
+      </div>
+
+      <!-- Sub-section: Komponen -->
+      <div id="servis-sub-komponen" class="servis-subsection">
+        <div class="section-heading">
+          <span class="section-heading-title">Komponen Motor</span>
+          <span class="text-xs text-secondary">15 items</span>
+        </div>
+
+        <!-- Component List (injected by JS) -->
+        <div id="komponen-list">
+
+          <!-- Template for each component (hidden) -->
+          <template id="tpl-komponen-card">
+            <div class="component-list-card" data-comp-key="">
+              <div class="component-list-header">
+                <div class="component-icon-wrap">
+                  <!-- SVG icon injected by JS -->
+                </div>
+                <div class="flex-1">
+                  <div class="d-flex align-center justify-between">
+                    <span class="component-name"></span>
+                    <span class="component-status safe"></span>
+                  </div>
+                  <div class="gauge-label mt-4">
+                    <span class="text-xs text-secondary">Sisa Jarak</span>
+                    <span class="component-remaining"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="component-list-body">
+                <div class="fuel-gauge-bar">
+                  <div class="gauge-fill" style="width:0%"></div>
+                </div>
+                <div class="gauge-label">
+                  <span class="last-replaced text-xs text-muted">Terakhir: —</span>
+                  <span class="interval-info text-xs text-muted">Interval: — km</span>
+                </div>
+                <button class="retro-btn retro-btn-outline retro-btn-sm w-full mt-8 btn-catat-ganti">
+                  Catat Penggantian
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- Placeholder while JS loads -->
+          <div class="card text-center text-secondary text-sm" style="padding:24px;">
+            <div class="spinner mb-8"></div>
+            Memuat data komponen...
+          </div>
+
+        </div><!-- /komponen-list -->
+      </div><!-- /servis-sub-komponen -->
+
+      <!-- Sub-section: Log Servis -->
+      <div id="servis-sub-log" class="servis-subsection" style="display:none;">
+        <div class="section-heading">
+          <span class="section-heading-title">Riwayat Servis</span>
+          <button class="retro-btn retro-btn-primary retro-btn-sm" id="btn-tambah-servis-log">+ Tambah</button>
+        </div>
+        <div class="log-list" id="servis-log-list">
+          <div class="empty-state" style="padding:32px 0;">
+            <div class="empty-state-icon" style="width:52px;height:52px;font-size:24px;">🔧</div>
+            <p class="empty-state-desc">Belum ada riwayat servis.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-section: Checklist Manual -->
+      <div id="servis-sub-checklist" class="servis-subsection" style="display:none;">
+        <div class="section-heading">
+          <span class="section-heading-title">Checklist Servis</span>
+          <button class="retro-btn retro-btn-sm" id="btn-reset-checklist">Reset</button>
+        </div>
+        <div class="settings-card">
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-oli">
+            <label class="checklist-label" for="chk-oli">Ganti oli mesin</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-oli-gear">
+            <label class="checklist-label" for="chk-oli-gear">Ganti oli gardan / gear</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-vbelt">
+            <label class="checklist-label" for="chk-vbelt">Periksa / ganti V-belt / rantai</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-roller">
+            <label class="checklist-label" for="chk-roller">Periksa roller CVT</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-filter-udara">
+            <label class="checklist-label" for="chk-filter-udara">Bersihkan / ganti filter udara</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-busi">
+            <label class="checklist-label" for="chk-busi">Periksa / ganti busi</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-rem-depan">
+            <label class="checklist-label" for="chk-rem-depan">Periksa kampas rem depan</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-rem-belakang">
+            <label class="checklist-label" for="chk-rem-belakang">Periksa kampas rem belakang</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-ban">
+            <label class="checklist-label" for="chk-ban">Periksa tekanan ban</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-aki">
+            <label class="checklist-label" for="chk-aki">Periksa aki / baterai</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-lampu">
+            <label class="checklist-label" for="chk-lampu">Cek semua lampu</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-coolant">
+            <label class="checklist-label" for="chk-coolant">Periksa coolant (jika ada)</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-cvt">
+            <label class="checklist-label" for="chk-cvt">Bersihkan ruang CVT</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-steer">
+            <label class="checklist-label" for="chk-steer">Periksa setang / steer</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-cb" id="chk-suspensi">
+            <label class="checklist-label" for="chk-suspensi">Periksa suspensi depan & belakang</label>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /servis-content -->
+  </section>
+
+  <!-- ════════════════════════════════
+       TAB 5 — PENGATURAN
+  ════════════════════════════════ -->
+  <section class="page-section" id="section-pengaturan" data-tab="pengaturan">
+
+    <!-- Tampilan -->
+    <div class="settings-section-title">🎨 Tampilan</div>
+    <div class="settings-card">
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Tema Gelap</div>
+          <div class="setting-row-desc">Aktifkan tampilan gelap retro</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-dark-mode" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Notifikasi -->
+    <div class="settings-section-title">🔔 Notifikasi</div>
+    <div class="settings-card">
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Notifikasi Oli</div>
+          <div class="setting-row-desc">Ingatkan saat oli hampir habis</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-oli" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Notifikasi V-Belt / Rantai</div>
+          <div class="setting-row-desc">Ingatkan servis v-belt / rantai</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-vbelt" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Notifikasi Rem</div>
+          <div class="setting-row-desc">Ingatkan cek kampas rem</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-rem" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Notifikasi Busi</div>
+          <div class="setting-row-desc">Ingatkan penggantian busi</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notif-busi">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="settings-section-title">💾 Data</div>
+    <div class="settings-card">
+      <div class="settings-link-row" id="btn-export-json">
+        <div class="settings-link-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <span class="settings-link-label">Export Data JSON</span>
+        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="settings-link-row" id="btn-import-json">
+        <div class="settings-link-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <span class="settings-link-label">Import Data JSON</span>
+        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <input type="file" id="file-import-json" accept=".json" style="display:none;">
+      <div class="settings-link-row" id="btn-reset-data" style="color: var(--status-crit-text);">
+        <div class="settings-link-icon" style="background:var(--status-crit-bg); color:var(--status-crit-text);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        </div>
+        <span class="settings-link-label" style="color:var(--status-crit-text);">Reset Semua Data</span>
+        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <!-- Motor Baseline (untuk motor bekas) -->
+    <div class="settings-section-title">🏍️ Baseline Motor Bekas</div>
+    <div class="settings-card" style="padding:16px;">
+      <p class="text-secondary text-sm mb-12">Punya motor bekas dengan riwayat servis tidak diketahui? Atur posisi awal komponen agar notifikasi tetap akurat.</p>
+      <div class="form-group">
+        <label class="form-label">Pilih Motor</label>
+        <select class="form-select" id="baseline-motor-select">
+          <option value="">— Pilih Motor —</option>
+        </select>
+      </div>
+      <div id="baseline-komponen-list">
+        <!-- Injected by JS after motor selected -->
+      </div>
+      <button class="retro-btn retro-btn-primary retro-btn-full mt-8" id="btn-simpan-baseline">Simpan Baseline</button>
+    </div>
+
+    <!-- Tentang -->
+    <div class="settings-section-title">ℹ️ Tentang Aplikasi</div>
+    <div class="settings-card" style="padding:20px 16px; text-align:center;">
+      <span class="about-logo">MotoCare</span>
+      <div class="text-secondary text-sm mb-8">Perawatan Motor Roda Dua Indonesia</div>
+      <span class="version-badge">v2.0.0</span>
+      <hr class="divider-dashed mt-12 mb-12">
+      <div class="d-flex" style="flex-direction:column; gap:8px;">
+        <div class="text-xs text-muted">Dibuat dengan ❤️ untuk rider Indonesia</div>
+        <a href="https://github.com" target="_blank" rel="noopener" class="retro-btn retro-btn-outline retro-btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Lihat di GitHub
+        </a>
+      </div>
+    </div>
+
+    <div style="height:16px;"></div>
+  </section>
+
+</main><!-- /main-content -->
+
+<!-- ══════════════════════════════════════════════════
+     BOTTOM NAVIGATION
+════════════════════════════════════════════════════ -->
+<nav class="bottom-nav" id="bottom-nav">
+
+  <button class="nav-item active" data-tab="beranda">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span class="nav-label">Beranda</span>
+  </button>
+
+  <button class="nav-item" data-tab="motorku">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/>
+      <path d="M15 6h-5L8 11l-3 2v2h1.5M15 6l2 5h3l1 2h-1.5"/>
+      <path d="M8 11h7"/>
+    </svg>
+    <span class="nav-label">Motorku</span>
+  </button>
+
+  <button class="nav-item" data-tab="bbm">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 22V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+      <path d="M15 8h3l2 2v8a2 2 0 0 1-2 2h-3"/>
+      <line x1="3" y1="22" x2="15" y2="22"/>
+      <rect x="6" y="10" width="6" height="4" rx="1"/>
+    </svg>
+    <span class="nav-label">BBM</span>
+  </button>
+
+  <button class="nav-item" data-tab="servis">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    <span class="nav-label">Servis</span>
+  </button>
+
+  <button class="nav-item" data-tab="pengaturan">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+    <span class="nav-label">Pengaturan</span>
+  </button>
+
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     FAB Button (Motorku tab)
+════════════════════════════════════════════════════ -->
+<button class="fab-btn" id="fab-add-motor" title="Tambah Motor" style="display:none;">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<!-- ══════════════════════════════════════════════════
+     GLOBAL MODALS
+════════════════════════════════════════════════════ -->
+
+<!-- Modal: Tambah / Edit Motor -->
+<div class="modal-overlay" id="modal-motor" role="dialog" aria-modal="true" aria-labelledby="modal-motor-title">
+  <div class="modal-sheet" id="modal-motor-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-motor-title">Tambah Motor</div>
+
+    <form id="form-motor" novalidate>
+      <!-- Step 1: Pilih Merek -->
+      <div id="motor-step-brand" class="motor-step">
+        <div class="form-group">
+          <label class="form-label">Merek Motor</label>
+          <select class="form-select" id="motor-brand" required>
+            <option value="">— Pilih Merek —</option>
+            <option value="Honda">Honda</option>
+            <option value="Yamaha">Yamaha</option>
+            <option value="Suzuki">Suzuki</option>
+            <option value="Kawasaki">Kawasaki</option>
+            <option value="Custom">Lainnya / Custom</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Step 2: Pilih Model -->
+      <div id="motor-step-model" class="motor-step" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Model Motor</label>
+          <select class="form-select" id="motor-model" required>
+            <option value="">— Pilih Model —</option>
+          </select>
+        </div>
+        <div id="motor-custom-model-wrap" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Nama Model (Custom)</label>
+            <input type="text" class="form-input" id="motor-custom-model" placeholder="Contoh: Honda CB400SF">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Detail Motor -->
+      <div id="motor-step-detail" class="motor-step" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Nama Panggilan</label>
+          <input type="text" class="form-input" id="motor-nickname" placeholder="Contoh: Vario Merahku" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tahun</label>
+            <input type="number" class="form-input" id="motor-year" placeholder="2022" min="1990" max="2030" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. Plat</label>
+            <input type="text" class="form-input" id="motor-plate" placeholder="B 1234 ABC" required style="text-transform:uppercase;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Odometer Awal (km)</label>
+          <input type="number" class="form-input" id="motor-odo" placeholder="0" min="0" required>
+          <div class="form-hint">Isi odometer saat ini untuk motor bekas</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Warna</label>
+          <input type="text" class="form-input" id="motor-color" placeholder="Merah, Hitam, dll.">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Catatan</label>
+          <textarea class="form-textarea" id="motor-notes" placeholder="Catatan tambahan..." rows="2"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-motor-back" style="display:none;">← Kembali</button>
+        <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-next">Lanjut →</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-save" style="display:none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan
+        </button>
+        <button type="button" class="retro-btn flex-1" id="btn-modal-motor-cancel">Batal</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Update Odometer -->
+<div class="modal-overlay" id="modal-odo" role="dialog" aria-modal="true" aria-labelledby="modal-odo-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-odo-title">Update Odometer</div>
+    <form id="form-odo">
+      <div class="form-group">
+        <label class="form-label">Odometer Sekarang (km)</label>
+        <input type="number" class="form-input" id="odo-input" placeholder="0" min="0" required style="font-family: var(--font-heading); font-size: 24px; letter-spacing: 0.05em;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tanggal</label>
+        <input type="date" class="form-input" id="odo-date" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-odo-cancel">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Catat Penggantian Komponen -->
+<div class="modal-overlay" id="modal-ganti-komponen" role="dialog" aria-modal="true" aria-labelledby="modal-komponen-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-komponen-title">Catat Penggantian</div>
+    <form id="form-ganti-komponen">
+      <input type="hidden" id="ganti-komp-key">
+      <div class="form-group">
+        <label class="form-label">Komponen</label>
+        <input type="text" class="form-input" id="ganti-komp-name" readonly style="color: var(--accent-primary); font-weight:600;">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Odometer Saat Ganti (km)</label>
+          <input type="number" class="form-input" id="ganti-komp-odo" placeholder="0" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal</label>
+          <input type="date" class="form-input" id="ganti-komp-date" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Biaya (Rp)</label>
+        <input type="number" class="form-input" id="ganti-komp-biaya" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Merek / Produk</label>
+        <input type="text" class="form-input" id="ganti-komp-produk" placeholder="Contoh: Yamalube, AHM Oil, ...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Catatan</label>
+        <textarea class="form-textarea" id="ganti-komp-notes" placeholder="Catatan..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-komp-cancel">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Catat Isi BBM -->
+<div class="modal-overlay" id="modal-bbm" role="dialog" aria-modal="true" aria-labelledby="modal-bbm-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-bbm-title">Catat Isi BBM</div>
+    <form id="form-bbm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Odometer (km)</label>
+          <input type="number" class="form-input" id="bbm-odo" placeholder="0" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal</label>
+          <input type="date" class="form-input" id="bbm-tanggal" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Jenis BBM</label>
+        <select class="form-select" id="bbm-jenis" required>
+          <option value="">— Pilih Jenis BBM —</option>
+          <!-- Options from FUEL_TYPES in data_v2.js -->
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Volume (Liter)</label>
+          <input type="number" class="form-input" id="bbm-volume" placeholder="0.0" step="0.1" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Harga/Liter (Rp)</label>
+          <input type="number" class="form-input" id="bbm-harga" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Bayar (Rp)</label>
+        <input type="number" class="form-input" id="bbm-total" placeholder="Otomatis dihitung" min="0">
+        <div class="form-hint">Bisa diisi manual atau otomatis dari volume × harga</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Catatan</label>
+        <input type="text" class="form-input" id="bbm-notes" placeholder="SPBU, kondisi, dll.">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-bbm-cancel">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Log Servis Manual -->
+<div class="modal-overlay" id="modal-servis-log" role="dialog" aria-modal="true" aria-labelledby="modal-servis-log-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-servis-log-title">Tambah Log Servis</div>
+    <form id="form-servis-log">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Odometer (km)</label>
+          <input type="number" class="form-input" id="servis-log-odo" placeholder="0" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal</label>
+          <input type="date" class="form-input" id="servis-log-date" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Jenis Servis</label>
+        <select class="form-select" id="servis-log-jenis">
+          <option value="ringan">Servis Ringan</option>
+          <option value="besar">Servis Besar</option>
+          <option value="cvt">Servis CVT</option>
+          <option value="rantai">Servis Rantai</option>
+          <option value="custom">Lainnya</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bengkel</label>
+        <input type="text" class="form-input" id="servis-log-bengkel" placeholder="Nama bengkel / AHASS / Yamaha">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Biaya (Rp)</label>
+        <input type="number" class="form-input" id="servis-log-biaya" placeholder="0" min="0">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Catatan / Detail</label>
+        <textarea class="form-textarea" id="servis-log-notes" placeholder="Komponen apa yang diganti, kondisi motor, dll."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-servis-log-cancel">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Konfirmasi Hapus -->
+<div class="modal-overlay" id="modal-konfirmasi" role="dialog" aria-modal="true" aria-labelledby="modal-konfirmasi-title">
+  <div class="modal-sheet" style="max-height:40vh;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-konfirmasi-title">Hapus Motor?</div>
+    <p class="text-secondary" id="modal-konfirmasi-desc" style="font-size:14px; line-height:1.6;">
+      Semua data motor ini akan dihapus permanen. Lanjutkan?
+    </p>
+    <div class="modal-footer">
+      <button type="button" class="retro-btn flex-1" id="btn-konfirmasi-cancel">Batal</button>
+      <button type="button" class="retro-btn retro-btn-danger flex-1" id="btn-konfirmasi-ok">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Pengaturan Notifikasi -->
+<div class="modal-overlay" id="modal-notif" role="dialog" aria-modal="true" aria-labelledby="modal-notif-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-notif-title">🔔 Pengaturan Notifikasi Layar</div>
+    <p class="text-secondary text-sm mb-12">
+      Atur pengingat servis dan pajak langsung ke bar status dan layar HP Anda.
+    </p>
+
+    <div class="switch-row">
+      <div>
+        <div class="font-bold text-sm">Notifikasi Sistem HP</div>
+        <div class="text-xs text-secondary">Muncul di layar kunci dan status bar HP</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-notif-master" checked />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <div>
+        <div class="font-bold text-sm">Peringatan Harian Overdue</div>
+        <div class="text-xs text-secondary">Notifikasi harian jika komponen lewat batas aman (bisa dimatikan)</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-notif-overdue" checked />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <div>
+        <div class="font-bold text-sm">Jarak Ideal & Wajar</div>
+        <div class="text-xs text-secondary">Pengingat persiapan sebelum batas kritis (oli sisa 350 km, v-belt 2.000 km)</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-notif-ideal" checked />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <div>
+        <div class="font-bold text-sm">Pengingat Pajak STNK</div>
+        <div class="text-xs text-secondary">Peringatan bertahap H-30, H-14, H-7, dan H-3</div>
+      </div>
+      <label class="switch-toggle">
+        <input type="checkbox" id="toggle-notif-tax" checked />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="mt-16">
+      <button type="button" class="retro-btn retro-btn-outline w-100" id="btn-test-notification">
+        🔔 Kirim Uji Coba Notifikasi ke Layar
+      </button>
+    </div>
+
+    <div class="modal-footer mt-16">
+      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-modal-notif-close">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Pemeriksaan Fisik Kamera Live -->
+<div class="modal-overlay" id="modal-camera" role="dialog" aria-modal="true" aria-labelledby="modal-camera-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="d-flex align-center justify-between mb-8">
+      <div class="modal-title" id="modal-camera-title">📹 Cek Fisik Kamera Live</div>
+      <button type="button" class="retro-btn retro-btn-sm" id="btn-camera-flip">🔄 Ganti Kamera</button>
+    </div>
+
+    <div class="camera-container" id="camera-box">
+      <video id="camera-stream" autoplay playsinline muted></video>
+      <canvas id="camera-canvas" style="display:none;"></canvas>
+      <div class="camera-reticle">
+        <span style="font-size:10px; color:rgba(255,255,255,0.7); background:rgba(0,0,0,0.5); padding:2px 6px; border-radius:4px;">Fokus Bagian Motor</span>
+      </div>
+    </div>
+
+    <div class="camera-controls">
+      <button type="button" class="btn-shutter" id="btn-camera-snap" title="Ambil Foto Pemeriksaan"></button>
+    </div>
+
+    <div class="mt-12 p-8" style="background:var(--input-bg); border-radius:var(--radius-card); border:1px dashed var(--border-color);">
+      <div class="text-xs font-bold text-accent mb-4">🔍 Panduan Cek Visual:</div>
+      <div class="text-xs text-secondary" style="line-height:1.5;">
+        • <strong>Ban:</strong> Periksa garis TWI (tanda aus) dan retak samping.<br/>
+        • <strong>Oli:</strong> Cek rembesan oli di bawah blok mesin dan CVT.<br/>
+        • <strong>Rantai/CVT:</strong> Cek karat atau kekenduran rantai.<br/>
+        • <strong>Shockbreaker:</strong> Pastikan as suspensi tidak basah beroli.
+      </div>
+    </div>
+
+    <div class="modal-footer mt-16">
+      <button type="button" class="retro-btn flex-1" id="btn-modal-camera-close">Selesai</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tanya Gemini AI Diagnostik -->
+<div class="modal-overlay" id="modal-gemini" role="dialog" aria-modal="true" aria-labelledby="modal-gemini-title">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-gemini-title">✨ Tanya Google Gemini AI</div>
+    <p class="text-secondary text-sm mb-12">
+      Pilih gejala kerusakan di bawah ini untuk menghasilkan prompt diagnosa spesifik motor Anda:
+    </p>
+
+    <!-- Symptom Chips -->
+    <div class="d-flex gap-8 mb-12" style="flex-wrap:wrap;">
+      <span class="gemini-chip active" data-symptom="cvt">Suara Gredek di CVT</span>
+      <span class="gemini-chip" data-symptom="lelet">Tarikan Berat & Boros</span>
+      <span class="gemini-chip" data-symptom="rem">Rem Berdecit / Ambles</span>
+      <span class="gemini-chip" data-symptom="asap">Knalpot Asap & Oli Kurang</span>
+      <span class="gemini-chip" data-symptom="second">Pemeriksaan Motor Second</span>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Prompt Otomatis (Termasuk Data Motor):</label>
+      <textarea class="form-textarea" id="gemini-prompt-preview" rows="5" readonly style="font-size:12px;"></textarea>
+    </div>
+
+    <div class="d-flex gap-8 mt-12">
+      <button type="button" class="retro-btn flex-1" id="btn-gemini-copy">
+        📋 Salin Prompt
+      </button>
+      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-gemini-launch">
+        🚀 Buka Gemini
+      </button>
+    </div>
+
+    <div class="modal-footer mt-16">
+      <button type="button" class="retro-btn flex-1" id="btn-modal-gemini-close">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast-msg" role="status" aria-live="polite"></div>
+
+<!-- ══════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════ -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
