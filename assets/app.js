@@ -35,6 +35,24 @@
     let activeCameraStream = null;
     let cameraFacingMode = 'environment';
 
+    // =========================================================================
+    // MODAL HELPERS (Supports both .open and .active for CSS reliability)
+    // =========================================================================
+    function openModal(modalId) {
+        const el = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+        if (el) {
+            el.classList.add('open', 'active');
+        }
+    }
+
+    function closeModal(modalId) {
+        const el = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+        if (el) {
+            el.classList.remove('open', 'active');
+        }
+    }
+
+
     // Wizard Tracker
     let wizardSelectedBrand = '';
     let wizardSelectedPresetId = '';
@@ -559,126 +577,124 @@
         });
     }
 
+        // =========================================================================
+    // MOTORKU LIST RENDERING & TAMBAH MOTOR FORM
+    // =========================================================================
     function openAddMotorWizard() {
-        const modal = document.getElementById('modal-motor');
-        if (!modal) return;
+        initBrandAndModelSelectors();
 
-        wizardSelectedBrand = 'Honda';
-        wizardSelectedPresetId = '';
+        const nickInput = document.getElementById('motor-nickname');
+        const yearInput = document.getElementById('motor-year');
+        const odoInput = document.getElementById('motor-odo');
+        const plateInput = document.getElementById('motor-plate');
+        const notesInput = document.getElementById('motor-notes');
 
-        // Reset wizard step views
-        showWizardStep(1);
-        renderWizardBrandChips();
-        renderWizardPresetOptions('Honda');
+        if (yearInput && !yearInput.value) yearInput.value = '2022';
+        if (odoInput && !odoInput.value) odoInput.value = '0';
+        if (plateInput) plateInput.value = '';
+        if (notesInput) notesInput.value = '';
 
-        // Reset inputs
-        const f = document.getElementById('form-motor');
-        if (f) f.reset();
-
-        const customWrap = document.getElementById('motor-custom-model-wrap');
-        if (customWrap) customWrap.style.display = 'none';
-
-        modal.classList.add('active');
+        openModal('modal-motor');
     }
 
-    function showWizardStep(stepNum) {
-        const stepBrand = document.getElementById('motor-step-brand');
-        const stepModel = document.getElementById('motor-step-model');
-        const stepDetail = document.getElementById('motor-step-detail');
-        const btnBack = document.getElementById('btn-modal-motor-back');
-        const btnNext = document.getElementById('btn-modal-motor-next');
-        const btnSave = document.getElementById('btn-modal-motor-save');
-
-        if (stepBrand) stepBrand.style.display = stepNum === 1 ? 'block' : 'none';
-        if (stepModel) stepModel.style.display = stepNum === 2 ? 'block' : 'none';
-        if (stepDetail) stepDetail.style.display = stepNum === 3 ? 'block' : 'none';
-
-        if (btnBack) btnBack.style.display = stepNum > 1 ? 'inline-block' : 'none';
-        if (btnNext) btnNext.style.display = stepNum < 3 ? 'inline-block' : 'none';
-        if (btnSave) btnSave.style.display = stepNum === 3 ? 'inline-block' : 'none';
-
-        modalStepCurrent = stepNum;
-    }
-
-    let modalStepCurrent = 1;
-
-    function renderWizardBrandChips() {
-        const brands = ['Honda', 'Yamaha', 'Suzuki', 'Kawasaki', 'Custom / Lainnya'];
+    function initBrandAndModelSelectors() {
         const brandSelect = document.getElementById('motor-brand');
-        if (!brandSelect) return;
-        brandSelect.innerHTML = '';
-        brands.forEach(b => {
-            const opt = document.createElement('option');
-            opt.value = b;
-            opt.textContent = b;
-            if (b === wizardSelectedBrand) opt.selected = true;
-            brandSelect.appendChild(opt);
-        });
-
-        brandSelect.onchange = function () {
-            wizardSelectedBrand = this.value;
-            renderWizardPresetOptions(this.value);
-        };
-    }
-
-    function renderWizardPresetOptions(brand) {
         const modelSelect = document.getElementById('motor-model');
-        if (!modelSelect || typeof MOTOR_PRESETS === 'undefined') return;
+        const customWrap = document.getElementById('motor-custom-model-wrap');
+        const nickInput = document.getElementById('motor-nickname');
 
-        modelSelect.innerHTML = '';
-        const filtered = MOTOR_PRESETS.filter(p => {
-            if (brand === 'Custom / Lainnya') return p.brand === 'Custom' || p.id === 'custom-motor';
-            return p.brand.toLowerCase() === brand.toLowerCase();
-        });
+        if (!brandSelect || !modelSelect) return;
 
-        filtered.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p.id;
-            opt.textContent = p.model + ' (' + (p.type || 'motor') + ')';
-            modelSelect.appendChild(opt);
-        });
+        function updateModelList() {
+            const selectedBrand = brandSelect.value;
+            modelSelect.innerHTML = '';
 
-        // Always add Custom option at the end
-        const customOpt = document.createElement('option');
-        customOpt.value = 'custom';
-        customOpt.textContent = '➕ Ketik Model Motor Sendiri...';
-        modelSelect.appendChild(customOpt);
+            let filtered = [];
+            if (typeof MOTOR_PRESETS !== 'undefined') {
+                filtered = MOTOR_PRESETS.filter(p => {
+                    if (selectedBrand === 'Custom / Lainnya') return p.brand === 'Custom' || p.id === 'custom-motor';
+                    return p.brand.toLowerCase() === selectedBrand.toLowerCase();
+                });
+            }
 
-        if (filtered.length > 0) {
-            wizardSelectedPresetId = filtered[0].id;
-            modelSelect.value = filtered[0].id;
+            filtered.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.model + (p.engine ? ' — ' + p.engine.split(' ')[0] : '');
+                modelSelect.appendChild(opt);
+            });
+
+            const customOpt = document.createElement('option');
+            customOpt.value = 'custom';
+            customOpt.textContent = '➕ Ketik Model Motor Sendiri...';
+            modelSelect.appendChild(customOpt);
+
+            if (filtered.length > 0) {
+                modelSelect.value = filtered[0].id;
+                if (nickInput && (!nickInput.value || nickInput.dataset.autofilled === 'true')) {
+                    nickInput.value = filtered[0].model;
+                    nickInput.dataset.autofilled = 'true';
+                }
+            }
+
+            checkCustomModelVisibility();
         }
 
-        const customWrap = document.getElementById('motor-custom-model-wrap');
-        modelSelect.onchange = function () {
-            wizardSelectedPresetId = this.value;
+        function checkCustomModelVisibility() {
+            const isCustom = modelSelect.value === 'custom';
             if (customWrap) {
-                customWrap.style.display = this.value === 'custom' ? 'block' : 'none';
+                customWrap.style.display = isCustom ? 'block' : 'none';
             }
-        };
+            if (!isCustom && nickInput) {
+                const preset = getPreset(modelSelect.value);
+                if (preset && (!nickInput.value || nickInput.dataset.autofilled === 'true')) {
+                    nickInput.value = preset.model;
+                    nickInput.dataset.autofilled = 'true';
+                }
+            }
+        }
+
+        brandSelect.onchange = updateModelList;
+        modelSelect.onchange = checkCustomModelVisibility;
+
+        if (nickInput) {
+            nickInput.oninput = function() {
+                this.dataset.autofilled = 'false';
+            };
+        }
+
+        updateModelList();
     }
 
     function handleSaveNewMotor(e) {
-        if (e) e.preventDefault();
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
-        const brand = wizardSelectedBrand || document.getElementById('motor-brand').value;
-        const presetId = wizardSelectedPresetId || document.getElementById('motor-model').value;
-        const isCustom = presetId === 'custom';
-
-        const customModelInput = document.getElementById('motor-custom-model');
-        const nicknameInput = document.getElementById('motor-nickname');
+        const brandSelect = document.getElementById('motor-brand');
+        const modelSelect = document.getElementById('motor-model');
+        const customInput = document.getElementById('motor-custom-model');
+        const nickInput = document.getElementById('motor-nickname');
         const plateInput = document.getElementById('motor-plate');
         const yearInput = document.getElementById('motor-year');
         const odoInput = document.getElementById('motor-odo');
         const notesInput = document.getElementById('motor-notes');
 
+        const brand = brandSelect ? brandSelect.value : 'Honda';
+        const presetId = modelSelect ? modelSelect.value : '';
+        const isCustom = presetId === 'custom' || brand === 'Custom / Lainnya';
+
+        const customModelText = (customInput && customInput.value.trim()) || '';
         const preset = (!isCustom && typeof MOTOR_PRESETS !== 'undefined') ? getPreset(presetId) : null;
 
         const modelName = isCustom
-            ? ((customModelInput && customModelInput.value.trim()) || 'Motor Kustom')
+            ? (customModelText || 'Sepeda Motor Kustom')
             : (preset ? preset.model : 'Sepeda Motor');
 
-        const nickname = (nicknameInput && nicknameInput.value.trim()) || modelName;
+        let nickname = (nickInput && nickInput.value.trim()) || '';
+        if (!nickname) nickname = modelName;
+
         const plate = (plateInput && plateInput.value.trim()) || '';
         const year = Number(yearInput && yearInput.value) || new Date().getFullYear();
         const initialOdo = Number(odoInput && odoInput.value) || 0;
@@ -688,7 +704,7 @@
         const newMotor = {
             id: newId,
             presetId: isCustom ? 'custom-motor' : presetId,
-            brand: brand,
+            brand: brand.replace(' / Lainnya', ''),
             model: modelName,
             nickname: nickname,
             plateNumber: plate,
@@ -715,7 +731,9 @@
                 tireFront: 20000,
                 tireRear: 18000,
                 brakeFluid: 20000,
-                cvtClean: 8000
+                cvtClean: 8000,
+                chainLube: 1000,
+                chainAdjust: 2000
             },
             taxAnnualDate: '',
             tax5YearDate: '',
@@ -731,9 +749,7 @@
         state.activeMotorId = newId;
         saveState();
 
-        const modal = document.getElementById('modal-motor');
-        if (modal) modal.classList.remove('active');
-
+        closeModal('modal-motor');
         renderAll();
         checkAndSendNotifications();
         showToast('✅ Berhasil menambahkan motor: ' + nickname);
@@ -761,13 +777,13 @@
                     state.activeMotorId = state.motors.length > 0 ? state.motors[0].id : null;
                 }
                 saveState();
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
                 renderAll();
                 showToast('Motor berhasil dihapus.');
             };
         }
 
-        if (modal) modal.classList.add('active');
+        openModal(modal);
     }
 
     // =========================================================================
@@ -780,7 +796,7 @@
         const modal = document.getElementById('modal-odo');
         const input = document.getElementById('odo-input');
         if (input) input.value = motor.currentOdo || 0;
-        if (modal) modal.classList.add('active');
+        openModal(modal);
     }
 
     function handleOdoSubmit(e) {
@@ -806,7 +822,7 @@
         saveState();
 
         const modal = document.getElementById('modal-odo');
-        if (modal) modal.classList.remove('active');
+        closeModal(modal);
 
         renderAll();
         checkAndSendNotifications();
@@ -928,7 +944,7 @@
         if (volEl) volEl.oninput = calcBbmTotal;
         if (hargaEl) hargaEl.oninput = calcBbmTotal;
 
-        if (modal) modal.classList.add('active');
+        openModal(modal);
     }
 
     function calcBbmTotal() {
@@ -976,7 +992,7 @@
         saveState();
 
         const modal = document.getElementById('modal-bbm');
-        if (modal) modal.classList.remove('active');
+        closeModal(modal);
 
         renderAll();
         showToast('⛽ Catatan BBM tersimpan!');
@@ -1094,7 +1110,7 @@
         if (titleEl) titleEl.textContent = 'Catat Penggantian ' + name;
         if (odoEl) odoEl.value = motor.currentOdo || '';
 
-        if (modal) modal.classList.add('active');
+        openModal(modal);
     }
 
     function handleGantiKomponenSubmit(e) {
@@ -1132,7 +1148,7 @@
         saveState();
 
         const modal = document.getElementById('modal-ganti-komponen');
-        if (modal) modal.classList.remove('active');
+        closeModal(modal);
 
         renderAll();
         checkAndSendNotifications();
@@ -1146,7 +1162,7 @@
         const modal = document.getElementById('modal-servis-log');
         const odoEl = document.getElementById('servis-log-odo');
         if (odoEl) odoEl.value = motor.currentOdo || '';
-        if (modal) modal.classList.add('active');
+        openModal(modal);
     }
 
     function handleServisLogSubmit(e) {
@@ -1179,7 +1195,7 @@
         saveState();
 
         const modal = document.getElementById('modal-servis-log');
-        if (modal) modal.classList.remove('active');
+        closeModal(modal);
 
         renderAll();
         showToast('✅ Riwayat servis berhasil dicatat!');
@@ -1279,7 +1295,7 @@
         const modal = document.getElementById('modal-camera');
         if (!modal) return;
 
-        modal.classList.add('active');
+        openModal(modal);
         startCameraStream();
     }
 
@@ -1343,7 +1359,7 @@
     function closeCameraModal() {
         stopCameraStream();
         const modal = document.getElementById('modal-camera');
-        if (modal) modal.classList.remove('active');
+        closeModal(modal);
     }
 
     // =========================================================================
@@ -1356,7 +1372,7 @@
         if (!modal) return;
 
         updateGeminiPromptPreview();
-        modal.classList.add('active');
+        openModal(modal);
     }
 
     function updateGeminiPromptPreview() {
@@ -1642,11 +1658,15 @@
         if (btnWizardCancel) {
             btnWizardCancel.addEventListener('click', () => {
                 const modal = document.getElementById('modal-motor');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
+        const btnSaveMotor = document.getElementById('btn-modal-motor-save');
+        if (btnSaveMotor) {
+            btnSaveMotor.onclick = handleSaveNewMotor;
+        }
         if (formMotor) {
-            formMotor.addEventListener('submit', handleSaveNewMotor);
+            formMotor.onsubmit = handleSaveNewMotor;
         }
 
         // Odometer Update
@@ -1660,7 +1680,7 @@
         if (btnCancelOdo) {
             btnCancelOdo.addEventListener('click', () => {
                 const modal = document.getElementById('modal-odo');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1675,7 +1695,7 @@
         if (btnCancelBbm) {
             btnCancelBbm.addEventListener('click', () => {
                 const modal = document.getElementById('modal-bbm');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1687,7 +1707,7 @@
         if (btnCancelKomp) {
             btnCancelKomp.addEventListener('click', () => {
                 const modal = document.getElementById('modal-ganti-komponen');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1702,7 +1722,7 @@
         if (btnCancelServisLog) {
             btnCancelServisLog.addEventListener('click', () => {
                 const modal = document.getElementById('modal-servis-log');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1727,7 +1747,7 @@
         if (btnGeminiClose) {
             btnGeminiClose.addEventListener('click', () => {
                 const modal = document.getElementById('modal-gemini');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1751,7 +1771,7 @@
         if (btnNotifHeader) {
             btnNotifHeader.addEventListener('click', () => {
                 const modal = document.getElementById('modal-notif');
-                if (modal) modal.classList.add('active');
+                openModal(modal);
             });
         }
 
@@ -1759,7 +1779,7 @@
         if (btnNotifClose) {
             btnNotifClose.addEventListener('click', () => {
                 const modal = document.getElementById('modal-notif');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 
@@ -1807,7 +1827,7 @@
         if (btnKonfirmasiCancel) {
             btnKonfirmasiCancel.addEventListener('click', () => {
                 const modal = document.getElementById('modal-konfirmasi');
-                if (modal) modal.classList.remove('active');
+                closeModal(modal);
             });
         }
 

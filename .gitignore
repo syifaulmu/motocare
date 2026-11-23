@@ -6,4 +6,5 @@ local.properties
 .idea/
 .DS_Store
 *.apk
-!app/release/*.apk
+!MotoCare_v2.0.apk
+!release/*.apk

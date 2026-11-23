@@ -752,9 +752,11 @@ h1, h2, h3, h4 {
   opacity: 0;
 }
 
-.modal-overlay.open {
-  display: flex;
-  opacity: 1;
+.modal-overlay.open,
+.modal-overlay.active {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .modal-sheet {
@@ -773,8 +775,9 @@ h1, h2, h3, h4 {
     border-color var(--transition-theme);
 }
 
-.modal-overlay.open .modal-sheet {
-  transform: translateY(0);
+.modal-overlay.open .modal-sheet,
+.modal-overlay.active .modal-sheet {
+  transform: translateY(0) !important;
 }
 
 .modal-handle {

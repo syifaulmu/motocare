@@ -632,78 +632,64 @@
   <div class="modal-sheet" id="modal-motor-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-motor-title">Tambah Motor</div>
+    <p class="text-secondary text-xs mb-12">Pilih dari 34+ database motor Indonesia atau masukkan model kustom.</p>
 
     <form id="form-motor" novalidate>
-      <!-- Step 1: Pilih Merek -->
-      <div id="motor-step-brand" class="motor-step">
-        <div class="form-group">
-          <label class="form-label">Merek Motor</label>
-          <select class="form-select" id="motor-brand" required>
-            <option value="">— Pilih Merek —</option>
-            <option value="Honda">Honda</option>
-            <option value="Yamaha">Yamaha</option>
-            <option value="Suzuki">Suzuki</option>
-            <option value="Kawasaki">Kawasaki</option>
-            <option value="Custom">Lainnya / Custom</option>
-          </select>
+      <div class="form-group mb-8">
+        <label class="form-label">1. Merek Motor</label>
+        <select class="form-select" id="motor-brand">
+          <option value="Honda">Honda</option>
+          <option value="Yamaha">Yamaha</option>
+          <option value="Suzuki">Suzuki</option>
+          <option value="Kawasaki">Kawasaki</option>
+          <option value="Custom / Lainnya">Custom / Merek Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group mb-8">
+        <label class="form-label">2. Model Motor (Preset Pabrikan)</label>
+        <select class="form-select" id="motor-model">
+          <!-- Diisi otomatis oleh JS -->
+        </select>
+      </div>
+
+      <div id="motor-custom-model-wrap" class="form-group mb-8" style="display:none;">
+        <label class="form-label">Ketik Nama Model Motor</label>
+        <input type="text" class="form-input" id="motor-custom-model" placeholder="Contoh: Honda CB400SF / Vespa Sprint" />
+      </div>
+
+      <div class="form-group mb-8">
+        <label class="form-label">3. Nama Panggilan Motor</label>
+        <input type="text" class="form-input" id="motor-nickname" placeholder="Contoh: Vario 110 Saya / NMAX Harian" />
+      </div>
+
+      <div class="form-row mb-8" style="display:flex; gap:8px;">
+        <div class="form-group flex-1">
+          <label class="form-label">Tahun</label>
+          <input type="number" class="form-input" id="motor-year" placeholder="2022" min="1990" max="2030" value="2022" />
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label">No. Plat</label>
+          <input type="text" class="form-input" id="motor-plate" placeholder="B 1234 ABC" style="text-transform:uppercase;" />
         </div>
       </div>
 
-      <!-- Step 2: Pilih Model -->
-      <div id="motor-step-model" class="motor-step" style="display:none;">
-        <div class="form-group">
-          <label class="form-label">Model Motor</label>
-          <select class="form-select" id="motor-model" required>
-            <option value="">— Pilih Model —</option>
-          </select>
-        </div>
-        <div id="motor-custom-model-wrap" style="display:none;">
-          <div class="form-group">
-            <label class="form-label">Nama Model (Custom)</label>
-            <input type="text" class="form-input" id="motor-custom-model" placeholder="Contoh: Honda CB400SF">
-          </div>
-        </div>
+      <div class="form-group mb-8">
+        <label class="form-label">4. Odometer Saat Ini (KM)</label>
+        <input type="number" class="form-input" id="motor-odo" placeholder="Contoh: 15000" min="0" value="0" />
+        <div class="text-xs text-secondary mt-4">Isi kilometer saat ini untuk motor bekas sebagai patokan servis.</div>
       </div>
 
-      <!-- Step 3: Detail Motor -->
-      <div id="motor-step-detail" class="motor-step" style="display:none;">
-        <div class="form-group">
-          <label class="form-label">Nama Panggilan</label>
-          <input type="text" class="form-input" id="motor-nickname" placeholder="Contoh: Vario Merahku" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Tahun</label>
-            <input type="number" class="form-input" id="motor-year" placeholder="2022" min="1990" max="2030" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. Plat</label>
-            <input type="text" class="form-input" id="motor-plate" placeholder="B 1234 ABC" required style="text-transform:uppercase;">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Odometer Awal (km)</label>
-          <input type="number" class="form-input" id="motor-odo" placeholder="0" min="0" required>
-          <div class="form-hint">Isi odometer saat ini untuk motor bekas</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Warna</label>
-          <input type="text" class="form-input" id="motor-color" placeholder="Merah, Hitam, dll.">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Catatan</label>
-          <textarea class="form-textarea" id="motor-notes" placeholder="Catatan tambahan..." rows="2"></textarea>
-        </div>
+      <div class="form-group mb-12">
+        <label class="form-label">Catatan Tambahan (Opsional)</label>
+        <input type="text" class="form-input" id="motor-notes" placeholder="Contoh: Dipakai harian kantor, kondisi bagus" />
       </div>
 
-      <div class="modal-footer">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-motor-back" style="display:none;">← Kembali</button>
-        <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-next">Lanjut →</button>
-        <button type="submit" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-save" style="display:none;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          Simpan
-        </button>
+      <div class="modal-footer mt-16" style="display:flex; gap:8px;">
         <button type="button" class="retro-btn flex-1" id="btn-modal-motor-cancel">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-save">
+          💾 Simpan Motor
+        </button>
       </div>
     </form>
   </div>
