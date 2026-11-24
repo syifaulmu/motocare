@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0D0D0D" />
   <meta name="description" content="MotoCare v2.0 — Aplikasi perawatan motor roda dua Indonesia" />
+  <!-- Content Security Policy: Disallows inline scripts & eval, restricts to local assets & required media -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self';" />
   <title>MotoCare v2.0</title>
 
   <!-- Google Fonts: Bebas Neue + Inter -->
@@ -29,18 +31,18 @@
 
   <div class="header-actions">
     <!-- Notification Bell -->
-    <button class="notif-btn" id="btn-notif" aria-label="Notifikasi" title="Notifikasi">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <button class="notif-btn" id="btn-notif" aria-label="Buka notifikasi dan pengingat" title="Notifikasi">
+      <svg class="nav-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
       </svg>
-      <span class="notification-dot" id="notif-dot" style="display:none;"></span>
+      <span class="notification-dot" id="notif-dot" style="display:none;" aria-label="Ada notifikasi baru"></span>
     </button>
 
     <!-- Theme Toggle -->
-    <button class="theme-toggle-btn" id="btn-theme-toggle" aria-label="Ganti tema" title="Ganti Tema">
+    <button class="theme-toggle-btn" id="btn-theme-toggle" aria-label="Ganti tema tampilan" title="Ganti Tema">
       <!-- Sun icon (shown in dark mode to switch to light) -->
-      <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg id="icon-sun" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="5"/>
         <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
@@ -48,7 +50,7 @@
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
       </svg>
       <!-- Moon icon (shown in light mode to switch to dark) -->
-      <svg id="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+      <svg id="icon-moon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
     </button>
@@ -67,11 +69,11 @@
 
     <!-- Empty State (shown when no motor added) -->
     <div class="empty-state" id="beranda-empty">
-      <div class="empty-state-icon">🛵</div>
+      <div class="empty-state-icon" aria-hidden="true">🛵</div>
       <div class="empty-state-title">Belum Ada Motor</div>
       <p class="empty-state-desc">Belum ada motor. Tambahkan motor pertamamu untuk mulai memantau kondisi kendaraan!</p>
-      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor" aria-label="Tambah Motor Pertama">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Tambah Motor
       </button>
     </div>
@@ -82,10 +84,10 @@
       <!-- Active Motor Selector -->
       <div class="motor-select-row mb-8">
         <div>
-          <div class="speedometer-label">Motor Aktif</div>
+          <label class="speedometer-label" for="select-active-motor">Motor Aktif</label>
           <div class="active-motor-name" id="active-motor-name">— Pilih Motor —</div>
         </div>
-        <select class="form-select" id="select-active-motor" style="width:auto; padding:7px 32px 7px 10px; font-size:12px;">
+        <select class="form-select" id="select-active-motor" aria-label="Pilih Motor Aktif" style="width:auto; padding:7px 32px 7px 10px; font-size:12px;">
           <!-- Options injected by JS -->
         </select>
       </div>
@@ -102,8 +104,8 @@
             <div class="text-xs text-secondary">Odo Awal</div>
             <div class="text-sm font-heading text-accent" id="odo-baseline">0 KM</div>
           </div>
-          <button class="retro-btn retro-btn-outline retro-btn-sm" id="btn-update-odo">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <button class="retro-btn retro-btn-outline retro-btn-sm" id="btn-update-odo" aria-label="Update Odometer">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Update Odo
           </button>
           <div>
@@ -116,28 +118,28 @@
       <!-- Quick Status — 4 Komponen Kritis -->
       <div class="section-heading">
         <span class="section-heading-title">Status Kritis</span>
-        <button class="retro-btn retro-btn-sm" id="btn-lihat-semua-komponen">Lihat Semua</button>
+        <button class="retro-btn retro-btn-sm" id="btn-lihat-semua-komponen" aria-label="Lihat Semua Komponen Servis">Lihat Semua</button>
       </div>
 
-      <div class="quick-status-grid" id="quick-status-grid">
+      <div class="quick-status-grid" id="quick-status-grid" role="region" aria-label="Ringkasan 4 Komponen Kritis">
         <!-- Items injected by JS: Oli, V-Belt/Rantai, Rem, Pajak -->
         <div class="quick-status-item">
-          <div class="quick-status-icon">🛢️</div>
+          <div class="quick-status-icon" aria-hidden="true">🛢️</div>
           <span class="status-pill hampir" id="qs-oli">HAMPIR</span>
           <span class="quick-status-name">Oli</span>
         </div>
         <div class="quick-status-item">
-          <div class="quick-status-icon">⚙️</div>
+          <div class="quick-status-icon" aria-hidden="true">⚙️</div>
           <span class="status-pill aman" id="qs-vbelt">AMAN</span>
           <span class="quick-status-name">V-Belt</span>
         </div>
         <div class="quick-status-item">
-          <div class="quick-status-icon">🛑</div>
+          <div class="quick-status-icon" aria-hidden="true">🛑</div>
           <span class="status-pill segera" id="qs-rem">SEGERA</span>
           <span class="quick-status-name">Rem</span>
         </div>
         <div class="quick-status-item">
-          <div class="quick-status-icon">📋</div>
+          <div class="quick-status-icon" aria-hidden="true">📋</div>
           <span class="status-pill aman" id="qs-pajak">AMAN</span>
           <span class="quick-status-name">Pajak</span>
         </div>
@@ -157,13 +159,13 @@
         <span class="section-heading-title">Fitur Khusus Motor</span>
       </div>
       <div class="d-flex gap-8 mb-16">
-        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-camera" style="border-color:var(--accent-secondary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
-          <span style="font-size:22px;">📹</span>
+        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-camera" aria-label="Buka Pemeriksaan Fisik Kamera Live" style="border-color:var(--accent-secondary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
+          <span aria-hidden="true" style="font-size:22px;">📹</span>
           <span style="font-weight:700; font-size:12px;">Cek Fisik Kamera</span>
           <span class="text-xs text-secondary">Pemeriksaan Visual Live</span>
         </button>
-        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-gemini" style="border-color:var(--accent-primary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
-          <span style="font-size:22px;">✨</span>
+        <button type="button" class="retro-btn retro-btn-outline flex-1" id="btn-open-gemini" aria-label="Buka Tanya Diagnosa Gemini AI" style="border-color:var(--accent-primary); color:var(--text-primary); display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 8px;">
+          <span aria-hidden="true" style="font-size:22px;">✨</span>
           <span style="font-weight:700; font-size:12px;">Tanya Gemini AI</span>
           <span class="text-xs text-secondary">Diagnosa Gejala Mesin</span>
         </button>
@@ -182,14 +184,14 @@
       <div class="empty-state-icon">🏍️</div>
       <div class="empty-state-title">Belum Ada Motor</div>
       <p class="empty-state-desc">Tambahkan motor kamu untuk mulai mencatat perawatan dan kondisi kendaraan.</p>
-      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor-2">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="retro-btn retro-btn-primary mt-12" id="btn-empty-add-motor-2" aria-label="Tambah Motor">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Tambah Motor
       </button>
     </div>
 
     <!-- Motor List -->
-    <div id="motorku-list" style="display:none;">
+    <div id="motorku-list" style="display:none;" role="region" aria-label="Daftar Sepeda Motor">
       <!-- Motor cards injected by JS -->
     </div>
 
@@ -217,9 +219,9 @@
           </div>
         </div>
         <div class="motor-card-actions">
-          <button class="retro-btn retro-btn-outline retro-btn-sm flex-1 btn-set-active">🏠 Jadikan Aktif</button>
-          <button class="retro-btn retro-btn-sm btn-edit-motor">✏️ Edit</button>
-          <button class="retro-btn retro-btn-danger retro-btn-sm btn-delete-motor">🗑️</button>
+          <button class="retro-btn retro-btn-outline retro-btn-sm flex-1 btn-set-active" aria-label="Jadikan Motor Aktif">🏠 Jadikan Aktif</button>
+          <button class="retro-btn retro-btn-sm btn-edit-motor" aria-label="Edit Data Motor">✏️ Edit</button>
+          <button class="retro-btn retro-btn-danger retro-btn-sm btn-delete-motor" aria-label="Hapus Motor">🗑️</button>
         </div>
       </div>
     </template>
@@ -233,7 +235,7 @@
 
     <!-- No motor state -->
     <div class="empty-state" id="bbm-empty">
-      <div class="empty-state-icon">⛽</div>
+      <div class="empty-state-icon" aria-hidden="true">⛽</div>
       <div class="empty-state-title">Pilih Motor Dulu</div>
       <p class="empty-state-desc">Tambahkan motor di tab Motorku untuk mulai mencatat pengisian BBM.</p>
     </div>
@@ -241,7 +243,7 @@
     <div id="bbm-content" style="display:none;">
 
       <!-- Summary Stats -->
-      <div class="bbm-summary-grid" id="bbm-summary-grid">
+      <div class="bbm-summary-grid" id="bbm-summary-grid" role="region" aria-label="Statistik Bahan Bakar">
         <div class="bbm-stat-card">
           <div class="bbm-stat-value" id="bbm-avg-kml">—</div>
           <div class="bbm-stat-label">Avg km/L</div>
@@ -257,8 +259,8 @@
       </div>
 
       <!-- Add BBM Button -->
-      <button class="retro-btn retro-btn-primary retro-btn-full mb-12" id="btn-catat-bbm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="retro-btn retro-btn-primary retro-btn-full mb-12" id="btn-catat-bbm" aria-label="Catat Isi BBM">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Catat Isi BBM
       </button>
 
@@ -268,10 +270,10 @@
         <span class="text-xs text-secondary" id="bbm-log-count">0 catatan</span>
       </div>
 
-      <div class="log-list" id="bbm-log-list">
+      <div class="log-list" id="bbm-log-list" role="region" aria-label="Riwayat Pengisian BBM">
         <!-- Log items injected by JS -->
         <div class="empty-state" style="padding:32px 0;">
-          <div class="empty-state-icon" style="width:52px;height:52px;font-size:24px;">📋</div>
+          <div class="empty-state-icon" aria-hidden="true" style="width:52px;height:52px;font-size:24px;">📋</div>
           <p class="empty-state-desc">Belum ada catatan BBM. Tekan "Catat Isi BBM" untuk mulai!</p>
         </div>
       </div>
@@ -286,7 +288,7 @@
 
     <!-- No motor state -->
     <div class="empty-state" id="servis-empty">
-      <div class="empty-state-icon">🔧</div>
+      <div class="empty-state-icon" aria-hidden="true">🔧</div>
       <div class="empty-state-title">Pilih Motor Dulu</div>
       <p class="empty-state-desc">Tambahkan motor di tab Motorku untuk memantau komponen dan jadwal servis.</p>
     </div>
@@ -294,10 +296,10 @@
     <div id="servis-content" style="display:none;">
 
       <!-- Secondary Tabs -->
-      <div class="tab-secondary" id="servis-tabs">
-        <button class="tab-secondary-item active" data-servis-tab="komponen">🔧 Komponen</button>
-        <button class="tab-secondary-item" data-servis-tab="log">📋 Log Servis</button>
-        <button class="tab-secondary-item" data-servis-tab="checklist">✅ Checklist</button>
+      <div class="tab-secondary" id="servis-tabs" role="tablist" aria-label="Kategori Servis">
+        <button class="tab-secondary-item active" data-servis-tab="komponen" role="tab" aria-selected="true" aria-controls="servis-sub-komponen">🔧 Komponen</button>
+        <button class="tab-secondary-item" data-servis-tab="log" role="tab" aria-selected="false" aria-controls="servis-sub-log">📋 Log Servis</button>
+        <button class="tab-secondary-item" data-servis-tab="checklist" role="tab" aria-selected="false" aria-controls="servis-sub-checklist">✅ Checklist</button>
       </div>
 
       <!-- Sub-section: Komponen -->
@@ -356,11 +358,11 @@
       <div id="servis-sub-log" class="servis-subsection" style="display:none;">
         <div class="section-heading">
           <span class="section-heading-title">Riwayat Servis</span>
-          <button class="retro-btn retro-btn-primary retro-btn-sm" id="btn-tambah-servis-log">+ Tambah</button>
+          <button class="retro-btn retro-btn-primary retro-btn-sm" id="btn-tambah-servis-log" aria-label="Tambah Catatan Log Servis">+ Tambah</button>
         </div>
-        <div class="log-list" id="servis-log-list">
+        <div class="log-list" id="servis-log-list" role="region" aria-label="Daftar Riwayat Servis">
           <div class="empty-state" style="padding:32px 0;">
-            <div class="empty-state-icon" style="width:52px;height:52px;font-size:24px;">🔧</div>
+            <div class="empty-state-icon" aria-hidden="true" style="width:52px;height:52px;font-size:24px;">🔧</div>
             <p class="empty-state-desc">Belum ada riwayat servis.</p>
           </div>
         </div>
@@ -370,67 +372,67 @@
       <div id="servis-sub-checklist" class="servis-subsection" style="display:none;">
         <div class="section-heading">
           <span class="section-heading-title">Checklist Servis</span>
-          <button class="retro-btn retro-btn-sm" id="btn-reset-checklist">Reset</button>
+          <button class="retro-btn retro-btn-sm" id="btn-reset-checklist" aria-label="Reset Semua Checklist Servis">Reset</button>
         </div>
         <div class="settings-card">
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-oli">
+            <input type="checkbox" class="checklist-cb" id="chk-oli" aria-label="Ganti oli mesin">
             <label class="checklist-label" for="chk-oli">Ganti oli mesin</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-oli-gear">
+            <input type="checkbox" class="checklist-cb" id="chk-oli-gear" aria-label="Ganti oli gardan atau gear">
             <label class="checklist-label" for="chk-oli-gear">Ganti oli gardan / gear</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-vbelt">
+            <input type="checkbox" class="checklist-cb" id="chk-vbelt" aria-label="Periksa atau ganti V-belt atau rantai">
             <label class="checklist-label" for="chk-vbelt">Periksa / ganti V-belt / rantai</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-roller">
+            <input type="checkbox" class="checklist-cb" id="chk-roller" aria-label="Periksa roller CVT">
             <label class="checklist-label" for="chk-roller">Periksa roller CVT</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-filter-udara">
+            <input type="checkbox" class="checklist-cb" id="chk-filter-udara" aria-label="Bersihkan atau ganti filter udara">
             <label class="checklist-label" for="chk-filter-udara">Bersihkan / ganti filter udara</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-busi">
+            <input type="checkbox" class="checklist-cb" id="chk-busi" aria-label="Periksa atau ganti busi">
             <label class="checklist-label" for="chk-busi">Periksa / ganti busi</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-rem-depan">
+            <input type="checkbox" class="checklist-cb" id="chk-rem-depan" aria-label="Periksa kampas rem depan">
             <label class="checklist-label" for="chk-rem-depan">Periksa kampas rem depan</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-rem-belakang">
+            <input type="checkbox" class="checklist-cb" id="chk-rem-belakang" aria-label="Periksa kampas rem belakang">
             <label class="checklist-label" for="chk-rem-belakang">Periksa kampas rem belakang</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-ban">
+            <input type="checkbox" class="checklist-cb" id="chk-ban" aria-label="Periksa tekanan ban">
             <label class="checklist-label" for="chk-ban">Periksa tekanan ban</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-aki">
+            <input type="checkbox" class="checklist-cb" id="chk-aki" aria-label="Periksa aki atau baterai">
             <label class="checklist-label" for="chk-aki">Periksa aki / baterai</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-lampu">
+            <input type="checkbox" class="checklist-cb" id="chk-lampu" aria-label="Cek semua lampu">
             <label class="checklist-label" for="chk-lampu">Cek semua lampu</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-coolant">
+            <input type="checkbox" class="checklist-cb" id="chk-coolant" aria-label="Periksa coolant jika ada">
             <label class="checklist-label" for="chk-coolant">Periksa coolant (jika ada)</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-cvt">
+            <input type="checkbox" class="checklist-cb" id="chk-cvt" aria-label="Bersihkan ruang CVT">
             <label class="checklist-label" for="chk-cvt">Bersihkan ruang CVT</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-steer">
+            <input type="checkbox" class="checklist-cb" id="chk-steer" aria-label="Periksa setang atau steer">
             <label class="checklist-label" for="chk-steer">Periksa setang / steer</label>
           </div>
           <div class="checklist-item">
-            <input type="checkbox" class="checklist-cb" id="chk-suspensi">
+            <input type="checkbox" class="checklist-cb" id="chk-suspensi" aria-label="Periksa suspensi depan dan belakang">
             <label class="checklist-label" for="chk-suspensi">Periksa suspensi depan & belakang</label>
           </div>
         </div>
@@ -449,11 +451,11 @@
     <div class="settings-card">
       <div class="setting-row">
         <div>
-          <div class="setting-row-label">Tema Gelap</div>
+          <label class="setting-row-label" for="toggle-dark-mode">Tema Gelap</label>
           <div class="setting-row-desc">Aktifkan tampilan gelap retro</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="toggle-dark-mode" checked>
+          <input type="checkbox" id="toggle-dark-mode" aria-label="Aktifkan Tema Gelap" checked>
           <span class="toggle-track"></span>
         </label>
       </div>
@@ -464,41 +466,41 @@
     <div class="settings-card">
       <div class="setting-row">
         <div>
-          <div class="setting-row-label">Notifikasi Oli</div>
+          <label class="setting-row-label" for="notif-oli">Notifikasi Oli</label>
           <div class="setting-row-desc">Ingatkan saat oli hampir habis</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="notif-oli" checked>
+          <input type="checkbox" id="notif-oli" aria-label="Notifikasi Penggantian Oli" checked>
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
         <div>
-          <div class="setting-row-label">Notifikasi V-Belt / Rantai</div>
+          <label class="setting-row-label" for="notif-vbelt">Notifikasi V-Belt / Rantai</label>
           <div class="setting-row-desc">Ingatkan servis v-belt / rantai</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="notif-vbelt" checked>
+          <input type="checkbox" id="notif-vbelt" aria-label="Notifikasi Servis V-Belt atau Rantai" checked>
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
         <div>
-          <div class="setting-row-label">Notifikasi Rem</div>
+          <label class="setting-row-label" for="notif-rem">Notifikasi Rem</label>
           <div class="setting-row-desc">Ingatkan cek kampas rem</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="notif-rem" checked>
+          <input type="checkbox" id="notif-rem" aria-label="Notifikasi Pemeriksaan Rem" checked>
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
         <div>
-          <div class="setting-row-label">Notifikasi Busi</div>
+          <label class="setting-row-label" for="notif-busi">Notifikasi Busi</label>
           <div class="setting-row-desc">Ingatkan penggantian busi</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="notif-busi">
+          <input type="checkbox" id="notif-busi" aria-label="Notifikasi Penggantian Busi">
           <span class="toggle-track"></span>
         </label>
       </div>
@@ -507,27 +509,27 @@
     <!-- Data -->
     <div class="settings-section-title">💾 Data</div>
     <div class="settings-card">
-      <div class="settings-link-row" id="btn-export-json">
+      <div class="settings-link-row" id="btn-export-json" role="button" tabindex="0" aria-label="Export Data ke File JSON">
         <div class="settings-link-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </div>
         <span class="settings-link-label">Export Data JSON</span>
-        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg aria-hidden="true" class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      <div class="settings-link-row" id="btn-import-json">
+      <div class="settings-link-row" id="btn-import-json" role="button" tabindex="0" aria-label="Import Data dari File JSON">
         <div class="settings-link-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
         <span class="settings-link-label">Import Data JSON</span>
-        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg aria-hidden="true" class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <input type="file" id="file-import-json" accept=".json" style="display:none;">
-      <div class="settings-link-row" id="btn-reset-data" style="color: var(--status-crit-text);">
+      <div class="settings-link-row" id="btn-reset-data" role="button" tabindex="0" aria-label="Reset Semua Data Aplikasi" style="color: var(--status-crit-text);">
         <div class="settings-link-icon" style="background:var(--status-crit-bg); color:var(--status-crit-text);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
         </div>
         <span class="settings-link-label" style="color:var(--status-crit-text);">Reset Semua Data</span>
-        <svg class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg aria-hidden="true" class="settings-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>
 
@@ -536,15 +538,15 @@
     <div class="settings-card" style="padding:16px;">
       <p class="text-secondary text-sm mb-12">Punya motor bekas dengan riwayat servis tidak diketahui? Atur posisi awal komponen agar notifikasi tetap akurat.</p>
       <div class="form-group">
-        <label class="form-label">Pilih Motor</label>
-        <select class="form-select" id="baseline-motor-select">
+        <label class="form-label" for="baseline-motor-select">Pilih Motor</label>
+        <select class="form-select" id="baseline-motor-select" aria-label="Pilih Motor untuk Baseline">
           <option value="">— Pilih Motor —</option>
         </select>
       </div>
       <div id="baseline-komponen-list">
         <!-- Injected by JS after motor selected -->
       </div>
-      <button class="retro-btn retro-btn-primary retro-btn-full mt-8" id="btn-simpan-baseline">Simpan Baseline</button>
+      <button class="retro-btn retro-btn-primary retro-btn-full mt-8" id="btn-simpan-baseline" aria-label="Simpan Pengaturan Baseline">Simpan Baseline</button>
     </div>
 
     <!-- Tentang -->
@@ -556,8 +558,8 @@
       <hr class="divider-dashed mt-12 mb-12">
       <div class="d-flex" style="flex-direction:column; gap:8px;">
         <div class="text-xs text-muted">Dibuat dengan ❤️ untuk rider Indonesia</div>
-        <a href="https://github.com" target="_blank" rel="noopener" class="retro-btn retro-btn-outline retro-btn-sm">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        <a href="https://github.com" target="_blank" rel="noopener" class="retro-btn retro-btn-outline retro-btn-sm" aria-label="Buka repository MotoCare di GitHub">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
           Lihat di GitHub
         </a>
       </div>
@@ -571,17 +573,17 @@
 <!-- ══════════════════════════════════════════════════
      BOTTOM NAVIGATION
 ════════════════════════════════════════════════════ -->
-<nav class="bottom-nav" id="bottom-nav">
+<nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Navigasi Menu Utama">
 
-  <button class="nav-item active" data-tab="beranda">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button class="nav-item active" data-tab="beranda" aria-label="Tab Beranda">
+    <svg aria-hidden="true" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
     <span class="nav-label">Beranda</span>
   </button>
 
-  <button class="nav-item" data-tab="motorku">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button class="nav-item" data-tab="motorku" aria-label="Tab Motorku">
+    <svg aria-hidden="true" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/>
       <path d="M15 6h-5L8 11l-3 2v2h1.5M15 6l2 5h3l1 2h-1.5"/>
       <path d="M8 11h7"/>
@@ -589,8 +591,8 @@
     <span class="nav-label">Motorku</span>
   </button>
 
-  <button class="nav-item" data-tab="bbm">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button class="nav-item" data-tab="bbm" aria-label="Tab BBM">
+    <svg aria-hidden="true" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 22V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
       <path d="M15 8h3l2 2v8a2 2 0 0 1-2 2h-3"/>
       <line x1="3" y1="22" x2="15" y2="22"/>
@@ -599,15 +601,15 @@
     <span class="nav-label">BBM</span>
   </button>
 
-  <button class="nav-item" data-tab="servis">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button class="nav-item" data-tab="servis" aria-label="Tab Servis">
+    <svg aria-hidden="true" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
     </svg>
     <span class="nav-label">Servis</span>
   </button>
 
-  <button class="nav-item" data-tab="pengaturan">
-    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button class="nav-item" data-tab="pengaturan" aria-label="Tab Pengaturan">
+    <svg aria-hidden="true" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="3"/>
       <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
     </svg>
@@ -619,8 +621,8 @@
 <!-- ══════════════════════════════════════════════════
      FAB Button (Motorku tab)
 ════════════════════════════════════════════════════ -->
-<button class="fab-btn" id="fab-add-motor" title="Tambah Motor" style="display:none;">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+<button class="fab-btn" id="fab-add-motor" title="Tambah Motor" aria-label="Tambah Motor Baru" style="display:none;">
+  <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
 
 <!-- ══════════════════════════════════════════════════
@@ -630,14 +632,15 @@
 <!-- Modal: Tambah / Edit Motor -->
 <div class="modal-overlay" id="modal-motor" role="dialog" aria-modal="true" aria-labelledby="modal-motor-title">
   <div class="modal-sheet" id="modal-motor-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-motor-title">Tambah Motor</div>
     <p class="text-secondary text-xs mb-12">Pilih dari 34+ database motor Indonesia atau masukkan model kustom.</p>
 
     <form id="form-motor" novalidate>
       <div class="form-group mb-8">
-        <label class="form-label">1. Merek Motor</label>
-        <select class="form-select" id="motor-brand">
+        <label class="form-label" for="motor-brand">1. Merek Motor</label>
+        <select class="form-select" id="motor-brand" aria-label="1. Merek Motor">
+        <span class="form-error" id="err-motor-brand" role="alert"></span>
           <option value="Honda">Honda</option>
           <option value="Yamaha">Yamaha</option>
           <option value="Suzuki">Suzuki</option>
@@ -647,47 +650,54 @@
       </div>
 
       <div class="form-group mb-8">
-        <label class="form-label">2. Model Motor (Preset Pabrikan)</label>
-        <select class="form-select" id="motor-model">
+        <label class="form-label" for="motor-model">2. Model Motor (Preset Pabrikan)</label>
+        <select class="form-select" id="motor-model" aria-label="2. Model Motor (Preset Pabrikan)">
+        <span class="form-error" id="err-motor-model" role="alert"></span>
           <!-- Diisi otomatis oleh JS -->
         </select>
       </div>
 
       <div id="motor-custom-model-wrap" class="form-group mb-8" style="display:none;">
-        <label class="form-label">Ketik Nama Model Motor</label>
+        <label class="form-label" for="motor-custom-model">Ketik Nama Model Motor</label>
         <input type="text" class="form-input" id="motor-custom-model" placeholder="Contoh: Honda CB400SF / Vespa Sprint" />
+        <span class="form-error" id="err-motor-custom-model" role="alert"></span>
       </div>
 
       <div class="form-group mb-8">
-        <label class="form-label">3. Nama Panggilan Motor</label>
+        <label class="form-label" for="motor-nickname">3. Nama Panggilan Motor</label>
         <input type="text" class="form-input" id="motor-nickname" placeholder="Contoh: Vario 110 Saya / NMAX Harian" />
+        <span class="form-error" id="err-motor-nickname" role="alert"></span>
       </div>
 
       <div class="form-row mb-8" style="display:flex; gap:8px;">
         <div class="form-group flex-1">
-          <label class="form-label">Tahun</label>
+          <label class="form-label" for="motor-year">Tahun</label>
           <input type="number" class="form-input" id="motor-year" placeholder="2022" min="1990" max="2030" value="2022" />
+          <span class="form-error" id="err-motor-year" role="alert"></span>
         </div>
         <div class="form-group flex-1">
-          <label class="form-label">No. Plat</label>
+          <label class="form-label" for="motor-plate">No. Plat</label>
           <input type="text" class="form-input" id="motor-plate" placeholder="B 1234 ABC" style="text-transform:uppercase;" />
+          <span class="form-error" id="err-motor-plate" role="alert"></span>
         </div>
       </div>
 
       <div class="form-group mb-8">
-        <label class="form-label">4. Odometer Saat Ini (KM)</label>
+        <label class="form-label" for="motor-odo">4. Odometer Saat Ini (KM)</label>
         <input type="number" class="form-input" id="motor-odo" placeholder="Contoh: 15000" min="0" value="0" />
+        <span class="form-error" id="err-motor-odo" role="alert"></span>
         <div class="text-xs text-secondary mt-4">Isi kilometer saat ini untuk motor bekas sebagai patokan servis.</div>
       </div>
 
       <div class="form-group mb-12">
-        <label class="form-label">Catatan Tambahan (Opsional)</label>
+        <label class="form-label" for="motor-notes">Catatan Tambahan (Opsional)</label>
         <input type="text" class="form-input" id="motor-notes" placeholder="Contoh: Dipakai harian kantor, kondisi bagus" />
+        <span class="form-error" id="err-motor-notes" role="alert"></span>
       </div>
 
       <div class="modal-footer mt-16" style="display:flex; gap:8px;">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-motor-cancel">Batal</button>
-        <button type="submit" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-save">
+        <button type="button" class="retro-btn flex-1" id="btn-modal-motor-cancel" aria-label="Batal tambah motor">Batal</button>
+        <button type="submit" class="retro-btn retro-btn-primary flex-1" id="btn-modal-motor-save" aria-label="Simpan data motor">
           💾 Simpan Motor
         </button>
       </div>
@@ -698,19 +708,22 @@
 <!-- Modal: Update Odometer -->
 <div class="modal-overlay" id="modal-odo" role="dialog" aria-modal="true" aria-labelledby="modal-odo-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-odo-title">Update Odometer</div>
     <form id="form-odo">
       <div class="form-group">
-        <label class="form-label">Odometer Sekarang (km)</label>
+        <label class="form-label" for="odo-input">Odometer Sekarang (km)</label>
         <input type="number" class="form-input" id="odo-input" placeholder="0" min="0" required style="font-family: var(--font-heading); font-size: 24px; letter-spacing: 0.05em;">
+        <span class="form-error" id="err-odo-input" role="alert"></span>
+        <span class="form-error" id="err-odo-input" role="alert"></span>
       </div>
       <div class="form-group">
-        <label class="form-label">Tanggal</label>
+        <label class="form-label" for="odo-date">Tanggal</label>
         <input type="date" class="form-input" id="odo-date" required>
+        <span class="form-error" id="err-odo-date" role="alert"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-odo-cancel">Batal</button>
+        <button type="button" class="retro-btn flex-1" id="btn-modal-odo-cancel" aria-label="Batal update odometer">Batal</button>
         <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
       </div>
     </form>
@@ -720,38 +733,42 @@
 <!-- Modal: Catat Penggantian Komponen -->
 <div class="modal-overlay" id="modal-ganti-komponen" role="dialog" aria-modal="true" aria-labelledby="modal-komponen-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-komponen-title">Catat Penggantian</div>
     <form id="form-ganti-komponen">
       <input type="hidden" id="ganti-komp-key">
       <div class="form-group">
-        <label class="form-label">Komponen</label>
+        <label class="form-label" for="ganti-komp-name">Komponen</label>
         <input type="text" class="form-input" id="ganti-komp-name" readonly style="color: var(--accent-primary); font-weight:600;">
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Odometer Saat Ganti (km)</label>
+          <label class="form-label" for="ganti-komp-odo">Odometer Saat Ganti (km)</label>
           <input type="number" class="form-input" id="ganti-komp-odo" placeholder="0" min="0" required>
+          <span class="form-error" id="err-ganti-komp-odo" role="alert"></span>
         </div>
         <div class="form-group">
-          <label class="form-label">Tanggal</label>
+          <label class="form-label" for="ganti-komp-date">Tanggal</label>
           <input type="date" class="form-input" id="ganti-komp-date" required>
+          <span class="form-error" id="err-ganti-komp-date" role="alert"></span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Biaya (Rp)</label>
+        <label class="form-label" for="ganti-komp-biaya">Biaya (Rp)</label>
         <input type="number" class="form-input" id="ganti-komp-biaya" placeholder="0" min="0">
+        <span class="form-error" id="err-ganti-komp-biaya" role="alert"></span>
       </div>
       <div class="form-group">
-        <label class="form-label">Merek / Produk</label>
+        <label class="form-label" for="ganti-komp-produk">Merek / Produk</label>
         <input type="text" class="form-input" id="ganti-komp-produk" placeholder="Contoh: Yamalube, AHM Oil, ...">
+        <span class="form-error" id="err-ganti-komp-produk" role="alert"></span>
       </div>
       <div class="form-group">
-        <label class="form-label">Catatan</label>
+        <label class="form-label" for="ganti-komp-notes">Catatan</label>
         <textarea class="form-textarea" id="ganti-komp-notes" placeholder="Catatan..."></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-komp-cancel">Batal</button>
+        <button type="button" class="retro-btn flex-1" id="btn-modal-komp-cancel" aria-label="Batal catat penggantian komponen">Batal</button>
         <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
       </div>
     </form>
@@ -761,47 +778,53 @@
 <!-- Modal: Catat Isi BBM -->
 <div class="modal-overlay" id="modal-bbm" role="dialog" aria-modal="true" aria-labelledby="modal-bbm-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-bbm-title">Catat Isi BBM</div>
     <form id="form-bbm">
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Odometer (km)</label>
+          <label class="form-label" for="bbm-odo">Odometer (km)</label>
           <input type="number" class="form-input" id="bbm-odo" placeholder="0" min="0" required>
+          <span class="form-error" id="err-bbm-odo" role="alert"></span>
         </div>
         <div class="form-group">
-          <label class="form-label">Tanggal</label>
+          <label class="form-label" for="bbm-tanggal">Tanggal</label>
           <input type="date" class="form-input" id="bbm-tanggal" required>
+          <span class="form-error" id="err-bbm-tanggal" role="alert"></span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Jenis BBM</label>
-        <select class="form-select" id="bbm-jenis" required>
+        <label class="form-label" for="bbm-jenis">Jenis BBM</label>
+        <select class="form-select" id="bbm-jenis" aria-label="Pilih Jenis BBM" required>
+        <span class="form-error" id="err-bbm-jenis" role="alert"></span>
           <option value="">— Pilih Jenis BBM —</option>
           <!-- Options from FUEL_TYPES in data_v2.js -->
         </select>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Volume (Liter)</label>
+          <label class="form-label" for="bbm-volume">Volume (Liter)</label>
           <input type="number" class="form-input" id="bbm-volume" placeholder="0.0" step="0.1" min="0" required>
+          <span class="form-error" id="err-bbm-volume" role="alert"></span>
         </div>
         <div class="form-group">
-          <label class="form-label">Harga/Liter (Rp)</label>
+          <label class="form-label" for="bbm-harga">Harga/Liter (Rp)</label>
           <input type="number" class="form-input" id="bbm-harga" placeholder="0" min="0">
+          <span class="form-error" id="err-bbm-harga" role="alert"></span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Total Bayar (Rp)</label>
+        <label class="form-label" for="bbm-total">Total Bayar (Rp)</label>
         <input type="number" class="form-input" id="bbm-total" placeholder="Otomatis dihitung" min="0">
+        <span class="form-error" id="err-bbm-total" role="alert"></span>
         <div class="form-hint">Bisa diisi manual atau otomatis dari volume × harga</div>
       </div>
       <div class="form-group">
-        <label class="form-label">Catatan</label>
+        <label class="form-label" for="bbm-notes">Catatan</label>
         <input type="text" class="form-input" id="bbm-notes" placeholder="SPBU, kondisi, dll.">
       </div>
       <div class="modal-footer">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-bbm-cancel">Batal</button>
+        <button type="button" class="retro-btn flex-1" id="btn-modal-bbm-cancel" aria-label="Batal catat pengisian BBM">Batal</button>
         <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
       </div>
     </form>
@@ -811,22 +834,25 @@
 <!-- Modal: Log Servis Manual -->
 <div class="modal-overlay" id="modal-servis-log" role="dialog" aria-modal="true" aria-labelledby="modal-servis-log-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-servis-log-title">Tambah Log Servis</div>
     <form id="form-servis-log">
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Odometer (km)</label>
+          <label class="form-label" for="servis-log-odo">Odometer (km)</label>
           <input type="number" class="form-input" id="servis-log-odo" placeholder="0" min="0" required>
+          <span class="form-error" id="err-servis-log-odo" role="alert"></span>
         </div>
         <div class="form-group">
-          <label class="form-label">Tanggal</label>
+          <label class="form-label" for="servis-log-date">Tanggal</label>
           <input type="date" class="form-input" id="servis-log-date" required>
+          <span class="form-error" id="err-servis-log-date" role="alert"></span>
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">Jenis Servis</label>
-        <select class="form-select" id="servis-log-jenis">
+        <label class="form-label" for="servis-log-jenis">Jenis Servis</label>
+        <select class="form-select" id="servis-log-jenis" aria-label="Pilih Jenis Servis">
+        <span class="form-error" id="err-servis-log-jenis" role="alert"></span>
           <option value="ringan">Servis Ringan</option>
           <option value="besar">Servis Besar</option>
           <option value="cvt">Servis CVT</option>
@@ -835,19 +861,21 @@
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Bengkel</label>
+        <label class="form-label" for="servis-log-bengkel">Bengkel</label>
         <input type="text" class="form-input" id="servis-log-bengkel" placeholder="Nama bengkel / AHASS / Yamaha">
+        <span class="form-error" id="err-servis-log-bengkel" role="alert"></span>
       </div>
       <div class="form-group">
-        <label class="form-label">Total Biaya (Rp)</label>
+        <label class="form-label" for="servis-log-biaya">Total Biaya (Rp)</label>
         <input type="number" class="form-input" id="servis-log-biaya" placeholder="0" min="0">
+        <span class="form-error" id="err-servis-log-biaya" role="alert"></span>
       </div>
       <div class="form-group">
-        <label class="form-label">Catatan / Detail</label>
+        <label class="form-label" for="servis-log-notes">Catatan / Detail</label>
         <textarea class="form-textarea" id="servis-log-notes" placeholder="Komponen apa yang diganti, kondisi motor, dll."></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="retro-btn flex-1" id="btn-modal-servis-log-cancel">Batal</button>
+        <button type="button" class="retro-btn flex-1" id="btn-modal-servis-log-cancel" aria-label="Batal tambah log servis">Batal</button>
         <button type="submit" class="retro-btn retro-btn-primary flex-1">Simpan</button>
       </div>
     </form>
@@ -857,14 +885,14 @@
 <!-- Modal: Konfirmasi Hapus -->
 <div class="modal-overlay" id="modal-konfirmasi" role="dialog" aria-modal="true" aria-labelledby="modal-konfirmasi-title">
   <div class="modal-sheet" style="max-height:40vh;">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-konfirmasi-title">Hapus Motor?</div>
     <p class="text-secondary" id="modal-konfirmasi-desc" style="font-size:14px; line-height:1.6;">
       Semua data motor ini akan dihapus permanen. Lanjutkan?
     </p>
     <div class="modal-footer">
-      <button type="button" class="retro-btn flex-1" id="btn-konfirmasi-cancel">Batal</button>
-      <button type="button" class="retro-btn retro-btn-danger flex-1" id="btn-konfirmasi-ok">Hapus</button>
+      <button type="button" class="retro-btn flex-1" id="btn-konfirmasi-cancel" aria-label="Batal hapus motor">Batal</button>
+      <button type="button" class="retro-btn retro-btn-danger flex-1" id="btn-konfirmasi-ok" aria-label="Konfirmasi hapus motor secara permanen">Hapus</button>
     </div>
   </div>
 </div>
@@ -872,7 +900,7 @@
 <!-- Modal: Pengaturan Notifikasi -->
 <div class="modal-overlay" id="modal-notif" role="dialog" aria-modal="true" aria-labelledby="modal-notif-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-notif-title">🔔 Pengaturan Notifikasi Layar</div>
     <p class="text-secondary text-sm mb-12">
       Atur pengingat servis dan pajak langsung ke bar status dan layar HP Anda.
@@ -884,7 +912,7 @@
         <div class="text-xs text-secondary">Muncul di layar kunci dan status bar HP</div>
       </div>
       <label class="switch-toggle">
-        <input type="checkbox" id="toggle-notif-master" checked />
+        <input type="checkbox" id="toggle-notif-master" aria-label="Notifikasi Sistem HP" checked />
         <span class="switch-slider"></span>
       </label>
     </div>
@@ -895,7 +923,7 @@
         <div class="text-xs text-secondary">Notifikasi harian jika komponen lewat batas aman (bisa dimatikan)</div>
       </div>
       <label class="switch-toggle">
-        <input type="checkbox" id="toggle-notif-overdue" checked />
+        <input type="checkbox" id="toggle-notif-overdue" aria-label="Peringatan Harian Overdue" checked />
         <span class="switch-slider"></span>
       </label>
     </div>
@@ -906,7 +934,7 @@
         <div class="text-xs text-secondary">Pengingat persiapan sebelum batas kritis (oli sisa 350 km, v-belt 2.000 km)</div>
       </div>
       <label class="switch-toggle">
-        <input type="checkbox" id="toggle-notif-ideal" checked />
+        <input type="checkbox" id="toggle-notif-ideal" aria-label="Jarak Ideal dan Wajar" checked />
         <span class="switch-slider"></span>
       </label>
     </div>
@@ -917,19 +945,19 @@
         <div class="text-xs text-secondary">Peringatan bertahap H-30, H-14, H-7, dan H-3</div>
       </div>
       <label class="switch-toggle">
-        <input type="checkbox" id="toggle-notif-tax" checked />
+        <input type="checkbox" id="toggle-notif-tax" aria-label="Pengingat Pajak STNK" checked />
         <span class="switch-slider"></span>
       </label>
     </div>
 
     <div class="mt-16">
-      <button type="button" class="retro-btn retro-btn-outline w-100" id="btn-test-notification">
+      <button type="button" class="retro-btn retro-btn-outline w-100" id="btn-test-notification" aria-label="Kirim Uji Coba Notifikasi ke Layar">
         🔔 Kirim Uji Coba Notifikasi ke Layar
       </button>
     </div>
 
     <div class="modal-footer mt-16">
-      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-modal-notif-close">Tutup</button>
+      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-modal-notif-close" aria-label="Tutup pengaturan notifikasi">Tutup</button>
     </div>
   </div>
 </div>
@@ -937,10 +965,10 @@
 <!-- Modal: Pemeriksaan Fisik Kamera Live -->
 <div class="modal-overlay" id="modal-camera" role="dialog" aria-modal="true" aria-labelledby="modal-camera-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="d-flex align-center justify-between mb-8">
       <div class="modal-title" id="modal-camera-title">📹 Cek Fisik Kamera Live</div>
-      <button type="button" class="retro-btn retro-btn-sm" id="btn-camera-flip">🔄 Ganti Kamera</button>
+      <button type="button" class="retro-btn retro-btn-sm" id="btn-camera-flip" aria-label="Ganti kamera depan atau belakang">🔄 Ganti Kamera</button>
     </div>
 
     <div class="camera-container" id="camera-box">
@@ -952,7 +980,7 @@
     </div>
 
     <div class="camera-controls">
-      <button type="button" class="btn-shutter" id="btn-camera-snap" title="Ambil Foto Pemeriksaan"></button>
+      <button type="button" class="btn-shutter" id="btn-camera-snap" title="Ambil Foto Pemeriksaan" aria-label="Ambil foto pemeriksaan fisik motor"></button>
     </div>
 
     <div class="mt-12 p-8" style="background:var(--input-bg); border-radius:var(--radius-card); border:1px dashed var(--border-color);">
@@ -966,7 +994,7 @@
     </div>
 
     <div class="modal-footer mt-16">
-      <button type="button" class="retro-btn flex-1" id="btn-modal-camera-close">Selesai</button>
+      <button type="button" class="retro-btn flex-1" id="btn-modal-camera-close" aria-label="Selesai dan tutup kamera">Selesai</button>
     </div>
   </div>
 </div>
@@ -974,37 +1002,67 @@
 <!-- Modal: Tanya Gemini AI Diagnostik -->
 <div class="modal-overlay" id="modal-gemini" role="dialog" aria-modal="true" aria-labelledby="modal-gemini-title">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
+    <div class="modal-handle" aria-hidden="true"></div>
     <div class="modal-title" id="modal-gemini-title">✨ Tanya Google Gemini AI</div>
     <p class="text-secondary text-sm mb-12">
       Pilih gejala kerusakan di bawah ini untuk menghasilkan prompt diagnosa spesifik motor Anda:
     </p>
 
     <!-- Symptom Chips -->
-    <div class="d-flex gap-8 mb-12" style="flex-wrap:wrap;">
-      <span class="gemini-chip active" data-symptom="cvt">Suara Gredek di CVT</span>
-      <span class="gemini-chip" data-symptom="lelet">Tarikan Berat & Boros</span>
-      <span class="gemini-chip" data-symptom="rem">Rem Berdecit / Ambles</span>
-      <span class="gemini-chip" data-symptom="asap">Knalpot Asap & Oli Kurang</span>
-      <span class="gemini-chip" data-symptom="second">Pemeriksaan Motor Second</span>
+    <div class="d-flex gap-8 mb-12" style="flex-wrap:wrap;" role="group" aria-label="Pilih Gejala Kerusakan">
+      <button type="button" class="gemini-chip active" data-symptom="cvt" aria-pressed="true">Suara Gredek di CVT</button>
+      <button type="button" class="gemini-chip" data-symptom="lelet" aria-pressed="false">Tarikan Berat & Boros</button>
+      <button type="button" class="gemini-chip" data-symptom="rem" aria-pressed="false">Rem Berdecit / Ambles</button>
+      <button type="button" class="gemini-chip" data-symptom="asap" aria-pressed="false">Knalpot Asap & Oli Kurang</button>
+      <button type="button" class="gemini-chip" data-symptom="second" aria-pressed="false">Pemeriksaan Motor Second</button>
     </div>
 
+    <!-- Privacy & Opt-in Consent -->
+    <div class="p-8 mb-12" style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:6px;">
+      <label class="d-flex align-center gap-8 text-xs cursor-pointer" style="color:var(--text-primary); margin:0;">
+        <input type="checkbox" id="gemini-optin-motor-data" checked aria-label="Sertakan data umum motor untuk diagnosa akurat" style="accent-color:var(--accent-primary);" />
+        <span>Sertakan data umum motor (Merek, Model, Tahun, Odo) untuk diagnosa akurat</span>
+      </label>
+      <div class="text-xs text-secondary mt-4" style="font-size:10px;">
+        🔒 <em>Privasi Terjaga: Nomor plat kendaraan dan catatan pribadi tidak akan pernah dikirim.</em>
+      </div>
+    </div>
+
+    <!-- Offline Diagnostic Tips Fallback -->
+    <div id="gemini-offline-banner" class="p-8 mb-12" style="display:none; background:rgba(255,215,0,0.1); border-left:3px solid var(--accent-secondary); border-radius:4px;">
+      <div class="font-bold text-xs" style="color:var(--text-primary);">📶 Mode Offline Aktif</div>
+      <div class="text-xs text-secondary mt-2">Menampilkan panduan pengecekan darurat lokal untuk gejala yang dipilih. Salin prompt jika ingin bertanya ke Gemini saat online.</div>
+    </div>
+    <div id="gemini-offline-tips" class="p-12 mb-12" style="display:none; background:var(--input-bg); border:1px dashed var(--border-color); border-radius:6px; font-size:12px;"></div>
+
     <div class="form-group">
-      <label class="form-label">Prompt Otomatis (Termasuk Data Motor):</label>
+      <label class="form-label" for="gemini-prompt-preview">Prompt Diagnosa Otomatis:</label>
       <textarea class="form-textarea" id="gemini-prompt-preview" rows="5" readonly style="font-size:12px;"></textarea>
     </div>
 
-    <div class="d-flex gap-8 mt-12">
-      <button type="button" class="retro-btn flex-1" id="btn-gemini-copy">
+    <!-- Direct AI Response Container (Sanitized) -->
+    <div id="gemini-response-container" class="mt-12" style="display:none;">
+      <div class="d-flex justify-between align-center mb-6">
+        <span class="font-bold text-xs" style="color:var(--accent-primary);">🤖 Analisa Gemini AI:</span>
+        <span class="text-xs text-secondary" id="gemini-status-indicator"></span>
+      </div>
+      <div id="gemini-response-text" class="p-12" style="background:var(--input-bg); border:1px solid var(--border-color); border-radius:6px; font-size:12px; line-height:1.5; max-height:200px; overflow-y:auto; color:var(--text-primary);"></div>
+    </div>
+
+    <div class="d-flex gap-8 mt-12" style="flex-wrap:wrap;">
+      <button type="button" class="retro-btn flex-1" id="btn-gemini-copy" aria-label="Salin prompt diagnosa">
         📋 Salin Prompt
       </button>
-      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-gemini-launch">
+      <button type="button" class="retro-btn flex-1" id="btn-gemini-ask-api" aria-label="Kirim diagnosa langsung ke Gemini API" style="display:none;">
+        ⚡ Diagnosa Langsung
+      </button>
+      <button type="button" class="retro-btn retro-btn-primary flex-1" id="btn-gemini-launch" aria-label="Buka web atau aplikasi Google Gemini">
         🚀 Buka Gemini
       </button>
     </div>
 
     <div class="modal-footer mt-16">
-      <button type="button" class="retro-btn flex-1" id="btn-modal-gemini-close">Tutup</button>
+      <button type="button" class="retro-btn flex-1" id="btn-modal-gemini-close" aria-label="Tutup dialog Gemini AI">Tutup</button>
     </div>
   </div>
 </div>
@@ -1016,6 +1074,7 @@
      SCRIPTS
 ════════════════════════════════════════════════════ -->
 <script src="data.js"></script>
+<script src="moto_logic.js"></script>
 <script src="app.js"></script>
 
 </body>
