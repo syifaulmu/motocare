@@ -8,20 +8,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
 
+    public static final String TAG = "AlarmNotifReceiver";
     public static final String CHANNEL_ID_IDEAL = "motocare_ideal";
     public static final String CHANNEL_ID_URGENT = "motocare_urgent";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent == null) return;
+        Log.i(TAG, "Alarm broadcast received with action: " + intent.getAction());
+
         SharedPreferences prefs = context.getSharedPreferences("motocare_prefs", Context.MODE_PRIVATE);
         boolean notificationsEnabled = prefs.getBoolean("notifications_enabled", true);
         boolean overdueDailyEnabled = prefs.getBoolean("overdue_daily_enabled", true);
 
         if (!notificationsEnabled) {
+            Log.d(TAG, "Notifications disabled. Ignoring alarm trigger.");
             return;
         }
 
@@ -32,11 +38,13 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
         boolean isOverdue = intent.getBooleanExtra("is_overdue", false);
 
         if (isOverdue && !overdueDailyEnabled) {
+            Log.d(TAG, "Overdue daily notification is disabled by user.");
             return;
         }
 
         if (title != null && message != null) {
             sendNotification(context, title, message, notifId, isOverdue ? CHANNEL_ID_URGENT : CHANNEL_ID_IDEAL);
+            Log.i(TAG, "Alarm notification dispatched successfully: " + title);
         }
     }
 

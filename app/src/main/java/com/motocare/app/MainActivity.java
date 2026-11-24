@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Notification Channels
         AlarmNotificationReceiver.createNotificationChannels(this);
 
+        // Initialize WorkManager Periodic Reminders (Doze & reboot resilient)
+        NotificationScheduler.schedulePeriodicWork(this);
+
         webView = new WebView(this);
         setContentView(webView);
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -31,12 +32,25 @@
             </intent-filter>
         </activity>
 
+        <!-- Internal alarm receiver for exact/fallback alarms -->
         <receiver
             android:name=".AlarmNotificationReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.motocare.app.CHECK_NOTIFICATIONS" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Boot receiver to restore WorkManager periodic tasks and pending exact alarms after reboot -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
     </application>
